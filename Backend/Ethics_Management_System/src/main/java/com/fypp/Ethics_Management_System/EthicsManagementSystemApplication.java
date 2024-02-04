@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EthicsManagementSystemApplication {
 
 	public static void main(String[] args) {
-
+		System.setProperty("org.springframework.security.debug", "true");
 		SpringApplication.run(EthicsManagementSystemApplication.class, args);
 	}
 

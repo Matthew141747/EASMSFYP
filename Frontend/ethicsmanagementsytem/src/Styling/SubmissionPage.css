@@ -1,0 +1,76 @@
+.submission-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px; 
+}
+
+.submission-form {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+    max-width: 500px; 
+    margin: auto; 
+}
+
+.submission-form h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; 
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="file"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px; 
+}
+
+.file-list {
+    margin-bottom: 20px;
+}
+
+.file-item {
+    background-color: #e1e1e1;
+    padding: 8px 12px; 
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+}
+
+.file-item::after {
+    content: '✔'; 
+    color: green; 
+    font-weight: bold;
+    margin-left: 8px; 
+}
+
+.submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
