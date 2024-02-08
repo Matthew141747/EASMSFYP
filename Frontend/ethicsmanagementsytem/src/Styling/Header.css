@@ -3,8 +3,9 @@
     color: white;
     padding: 15px 30px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center the items */
     align-items: center;
+    position: relative; /* Needed for absolute positioning of children */
 }
 
 .nav-links {
@@ -32,6 +33,7 @@
 .user-section {
     display: flex;
     align-items: center;
+    margin-left: auto;
 }
 
 .user-info {
@@ -65,7 +67,20 @@
     background-color: #388e3c;
 }
 
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
 
+.header-title {
+    color: white;
+    text-align: center; /* This will center the title */
+    margin: 0 auto; /* This will give equal margin on both sides */
+    padding: 0 20px; /* Add padding to ensure title does not overlap nav links */
+    flex: none; /* Do not allow the title to grow or shrink */
+}
 @media (max-width: 768px) {
     .nav-links {
         flex-direction: column;

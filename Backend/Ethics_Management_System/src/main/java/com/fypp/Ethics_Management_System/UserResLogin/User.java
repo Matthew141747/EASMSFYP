@@ -57,7 +57,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private String accountType = "user"; //default value set here, remember to change.
+    private String accountType = "applicant"; //default value set here, remember to change.
 
 
     @Override

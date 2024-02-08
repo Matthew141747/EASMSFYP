@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -19,19 +21,29 @@ public class SubmissionService {
     @Autowired
     private FileRepository fileRepository;
 
+    @Autowired
+    private AWSFileStorageService awsFileStorageService;
+
 
     @Transactional
-    public SubmissionDTO createSubmission(Set<MultipartFile> files, int userId) {
+    public SubmissionDTO createSubmission(Set<MultipartFile> files, int userId, String faculty, String department, String studentId) {
         Submission submission = new Submission();
         submission.setUserId(userId);
         submission.setSubmissionDate(LocalDateTime.now());
+        submission.setFaculty(faculty);
+        submission.setDepartment(department);
+        submission.setStudentId(studentId);
 
         files.forEach(file -> {
             File fileEntity = new File();
             fileEntity.setFileName(file.getOriginalFilename());
             fileEntity.setFileType(file.getContentType());
-            String filePath = storeFile(file);
-            fileEntity.setFilePath(filePath);
+            try {
+                String filePath = awsFileStorageService.storeFile(file);
+                fileEntity.setFilePath(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException("Error storing file: " + file.getOriginalFilename(), e);
+            }
             fileEntity.setUploadDate(LocalDateTime.now());
             fileEntity.setUserId(userId);
             submission.addFile(fileEntity);
@@ -42,22 +54,42 @@ public class SubmissionService {
         return convertToSubmissionDTO(submission);
     }
 
-    private String storeFile(MultipartFile file) {
-        // Placeholder for file storage logic
-        // Return the file path or URL where the file is stored
-        return "path/to/file";
-    }
 
     private SubmissionDTO convertToSubmissionDTO(Submission submission) {
         List<FileDTO> fileDTOs = submission.getFiles().stream()
                 .map(this::convertToFileDTO)
                 .collect(Collectors.toList());
 
-        return new SubmissionDTO(submission.getId(), submission.getUserId(), fileDTOs);
+        return new SubmissionDTO(submission.getId(), submission.getUserId(), fileDTOs, submission.getDepartment(), submission.getFaculty(), submission.getStudentId(), submission.getSubmissionDate());
     }
 
     private FileDTO convertToFileDTO(File file) {
         return new FileDTO(file.getId(), file.getFileName(), file.getFileType(), file.getUserId(), file.getFilePath(), file.getUploadDate());
+    }
+
+
+    public List<SubmissionDTO> getAllSubmissions() {
+        return submissionRepository.findAll().stream()
+                .map(this::convertToSubmissionDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<SubmissionDTO> getSubmissionsByFaculty(String faculty) {
+        return submissionRepository.findByFaculty(faculty).stream()
+                .map(this::convertToSubmissionDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<SubmissionDTO> getSubmissionsByDepartment(String department) {
+        return submissionRepository.findByDepartment(department).stream()
+                .map(this::convertToSubmissionDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<SubmissionDTO> getSubmissionsByDate(LocalDate submissionDate) {
+        return submissionRepository.findBySubmissionDate(submissionDate).stream()
+                .map(this::convertToSubmissionDTO)
+                .collect(Collectors.toList());
     }
 
 

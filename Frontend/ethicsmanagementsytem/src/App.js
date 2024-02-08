@@ -11,7 +11,7 @@ import Submission from './Pages/Submission'
 import Analytics from './Pages/Analytics'
 import Registration from './Pages/Registration'
 import LoginForm from './Pages/Login';
-
+import SubmissionDashboard from './Pages/SubmissionDashboard';
 
 
 export function App() {
@@ -43,6 +43,7 @@ export function App() {
                     <Route path="/about" element = {<About/>} />
                     <Route path="/profile" element = {<Profile/>} />
                     <Route path="/submission" element = {<Submission/>} />
+                    <Route path='/submissionDashboard' element = {<SubmissionDashboard/>} />
                     <Route path="/analytics" element = {<Analytics/>} />
                     <Route path="/registration" element = {<Registration/>} />
                     <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />

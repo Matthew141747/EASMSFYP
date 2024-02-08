@@ -44,6 +44,39 @@ public class Submission {
     @Column(nullable = false)
     private LocalDateTime submissionDate;
 
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    @Column(nullable = false)
+    private String faculty;
+
+    @Column(nullable = false)
+    private String department;
+
+    @Column(nullable = false)
+    private String studentId;
+
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<File> files = new HashSet<>();
 

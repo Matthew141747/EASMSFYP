@@ -1,0 +1,55 @@
+.committee-dashboard {
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.dashboard-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.submissions-table {
+    width: 70%;
+    border-collapse: collapse;
+}
+
+.submissions-table th,
+.submissions-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.submissions-table th {
+    background-color: #f0f0f0;
+}
+
+.submission-details {
+    width: 25%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.submission-details button {
+    padding: 10px 15px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submission-details button:hover {
+    background-color: #0056b3;
+}
