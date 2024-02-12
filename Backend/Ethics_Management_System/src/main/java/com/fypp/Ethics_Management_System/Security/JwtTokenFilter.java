@@ -34,12 +34,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         try {
             String jwt = getJwtFromRequest(request);
-            logger.debug("JWT Received: {}", jwt);
+            //logger.debug("JWT Received: {}", jwt);
 
             if (jwt != null && jwt.split("\\.").length == 3) {
-                logger.info("JWT structure looks correct.");
+                //logger.info("JWT structure looks correct.");
             } else {
-                logger.warn("JWT structure is incorrect: {}", jwt);
+                //logger.warn("JWT structure is incorrect: {}", jwt);
             }
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
@@ -48,10 +48,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 logger.info("JWT token validated and authentication set in security context for request: {}", request.getRequestURL());
 
             }else{
-                logger.info("No JWT token found or token invalid for request: {}", request.getRequestURL());
+                //logger.info("No JWT token found or token invalid for request: {}", request.getRequestURL());
             }
         } catch (Exception ex) {
-            logger.error("Error setting user authentication in security context", ex);
+            //logger.error("Error setting user authentication in security context", ex);
         }
 
         filterChain.doFilter(request, response);

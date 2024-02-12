@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 import Header from './Components/Header';
@@ -18,14 +18,29 @@ export function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
 
+
+    useEffect(() => {
+        // Check if user is logged in when the app component mounts
+        const token = localStorage.getItem('userToken');
+        const storedUsername = localStorage.getItem('username');
+        if (token) {
+            setIsLoggedIn(true);
+            setUsername(storedUsername || '');
+        }
+    }, []);
+
     const handleLogout = () => {
           // Clear token and reset state
           localStorage.removeItem('userToken');
+          localStorage.removeItem('username');
           setIsLoggedIn(false);
           setUsername('');
       };
 
-      const handleLogin = (username) => {
+      const handleLogin = (username, token) => {
+        // Save the username and token in local storage
+        localStorage.setItem('username', username);
+        localStorage.setItem('userToken', token);
         setIsLoggedIn(true);
         setUsername(username);
     };

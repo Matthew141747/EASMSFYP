@@ -3,21 +3,63 @@
     background-color: #f4f4f4;
 }
 
-.search-bar {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+.search-and-filter {
+    display: flex;
+    flex-direction: row; 
+    align-items: center; 
+    gap: 10px; 
 }
 
-.dashboard-content {
+.search-bar {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.fetch-button {
+    padding: 10px 15px; 
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    height: 38px; 
+    box-sizing: border-box; 
+}
+
+.fetch-button:hover {
+    background-color: #0056b3;
+}
+
+
+.filters {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 10px; 
+}
+
+.date-picker {
+    margin-left: 10px;
+    width: auto; /* Allow the date picker to size according to its content */
+}
+
+.dashboard-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.submissions-table-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
 }
 
 .submissions-table {
-    width: 70%;
+    width: 100%;
     border-collapse: collapse;
 }
 
@@ -29,20 +71,18 @@
 }
 
 .submissions-table th {
-    background-color: #f0f0f0;
+    background-color: #e9ecef;
 }
 
 .submission-details {
-    width: 25%;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
     background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
 }
 
 .submission-details button {
     padding: 10px 15px;
-    margin-top: 10px;
     background-color: #007bff;
     color: white;
     border: none;
@@ -51,5 +91,50 @@
 }
 
 .submission-details button:hover {
+    background-color: #0056b3;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f3f3f3;
+    border-top: 1px solid #ddd;
+}
+
+.pagination-left, .pagination-right {
+    display: flex;
+    align-items: center;
+}
+
+.pagination-left > * {
+    margin-right: 8px; 
+}
+
+.pagination-right {
+    margin-left: auto; 
+}
+.pagination-controls select {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.pagination-controls button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100px;
+}
+
+.pagination-controls button:disabled {
+    background-color: #cccccc;
+}
+
+.pagination-controls button:hover:not(:disabled) {
     background-color: #0056b3;
 }

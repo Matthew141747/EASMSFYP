@@ -1,7 +1,15 @@
 package com.fypp.Ethics_Management_System.Submission;
 
+import com.fypp.Ethics_Management_System.Security.TokenProvider;
+import com.fypp.Ethics_Management_System.UserResLogin.User;
+import com.fypp.Ethics_Management_System.UserResLogin.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +17,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,7 +33,10 @@ public class SubmissionService {
     @Autowired
     private AWSFileStorageService awsFileStorageService;
 
+    @Autowired
+    private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     @Transactional
     public SubmissionDTO createSubmission(Set<MultipartFile> files, int userId, String faculty, String department, String studentId) {
         Submission submission = new Submission();
@@ -54,6 +66,28 @@ public class SubmissionService {
         return convertToSubmissionDTO(submission);
     }
 
+    public Page<SubmissionDTO> findAllSubmissions(Optional<String> faculty, Optional<LocalDate> startDate, Optional<LocalDate> endDate, Pageable pageable) {
+        // Convert LocalDate to LocalDateTime as needed
+        LocalDateTime startDateTime = startDate.map(date -> date.atStartOfDay()).orElse(null);
+        LocalDateTime endDateTime = endDate.map(date -> date.atTime(23, 59, 59)).orElse(null);
+
+        // Log the converted date times
+        logger.info("Converted startDate: {}, endDate: {}", startDateTime, endDateTime);
+
+        Specification<Submission> spec = Specification.where(SubmissionSpecifications.withFaculty(faculty.orElse("")))
+                .and(SubmissionSpecifications.withinDateRange(startDateTime, endDateTime));
+
+        // Log the specification result
+        logger.debug("Specifications: withFaculty: {}, withinDateRange: {} to {}", faculty.orElse("None"), startDateTime, endDateTime);
+
+        Page<Submission> submissions = submissionRepository.findAll(spec, pageable);
+
+        // Log the actual content size
+        logger.info("Fetched submissions size: {}", submissions.getSize());
+
+        return submissions.map(this::convertToSubmissionDTO);
+    }
+
 
     private SubmissionDTO convertToSubmissionDTO(Submission submission) {
         List<FileDTO> fileDTOs = submission.getFiles().stream()
@@ -67,6 +101,12 @@ public class SubmissionService {
         return new FileDTO(file.getId(), file.getFileName(), file.getFileType(), file.getUserId(), file.getFilePath(), file.getUploadDate());
     }
 
+    public List<SubmissionDTO> getSubmissionsByUserId(int userId) {
+        return submissionRepository.findByUserId(userId).stream()
+                .map(this::convertToSubmissionDTO)
+                .collect(Collectors.toList());
+    }
+
 
     public List<SubmissionDTO> getAllSubmissions() {
         return submissionRepository.findAll().stream()
@@ -74,23 +114,18 @@ public class SubmissionService {
                 .collect(Collectors.toList());
     }
 
-    public List<SubmissionDTO> getSubmissionsByFaculty(String faculty) {
-        return submissionRepository.findByFaculty(faculty).stream()
-                .map(this::convertToSubmissionDTO)
-                .collect(Collectors.toList());
+    public void deleteSubmission(Long submissionId, String username) {
+        Submission submission = submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new RuntimeException("Submission not found"));
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not authenticated"));
+        if (submission.getUserId() != user.getId()) {
+            throw new RuntimeException("User does not have permission to delete this submission");
+        }
+        submissionRepository.delete(submission);
     }
 
-    public List<SubmissionDTO> getSubmissionsByDepartment(String department) {
-        return submissionRepository.findByDepartment(department).stream()
-                .map(this::convertToSubmissionDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<SubmissionDTO> getSubmissionsByDate(LocalDate submissionDate) {
-        return submissionRepository.findBySubmissionDate(submissionDate).stream()
-                .map(this::convertToSubmissionDTO)
-                .collect(Collectors.toList());
-    }
+    // Endpoint to Modify a submission
 
 
 }

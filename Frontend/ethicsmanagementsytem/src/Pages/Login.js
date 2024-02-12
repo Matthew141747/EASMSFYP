@@ -29,9 +29,9 @@ const LoginForm = ({ onLogin }) => {
             if (response.ok) {
                 const data = await response.json();
                 // Save the token in local storage or context
-                 localStorage.setItem('userToken', data.token);
+                 //localStorage.setItem('userToken', data.token);
                 
-                onLogin(username);
+                onLogin(username, data.token);
                 navigate('/Home'); // Redirect to home page
             } else {
                 
