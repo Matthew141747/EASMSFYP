@@ -1,87 +1,261 @@
 .submission-page {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 100vh; /* Changed from 'height' to 'min-height' */
+    min-height: 100vh;
     background-color: #f4f4f4;
-    padding: 20px; 
+    padding: 20px;
+}
+
+.submission-container {
+    width: 80%;
+    max-width: 1200px;
+    background: white;
+    padding: 30px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.submission-container h1,
+.submission-form h2,
+.review-results-form h2,
+.parsed-data-form h2 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.submission-container p,
+.submission-container ol,
+.parsed-data-results p,
+.review-results p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.submission-container ol,
+.parsed-data-results p {
+    padding-left: 20px;
+}
+
+.submission-form-container {
+    margin: 0;
+    padding: 0;
 }
 
 .submission-form {
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%; 
-    max-width: 600px; 
-    margin: auto; 
-}
-
-.form-group input[type="text"],
-.form-group select,
-.form-group input[type="file"] {
-    width: calc(100% - 24px); /* Adjust width to account for padding */
-    padding: 8px 12px; /* Consistent padding on all sides */
-    margin-bottom: 10px; /* Consistent margin below the inputs */
-    border: 1px solid #ccc; /* Consistent border */
-    border-radius: 4px; /* Rounded corners */
-    box-sizing: border-box; /* Include padding in the width calculation */
-}
-
-.submission-form h2 {
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center; 
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-horizontal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.form-horizontal .form-group {
+    flex: 1; 
+    margin-right: 10px; 
+}
+
+/* Remove margin-right from the last form-group inside .form-horizontal */
+.form-horizontal .form-group:last-child {
+    margin-right: 0;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-group input[type="file"] {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px; 
-}
-
-.file-list {
-    margin-bottom: 20px;
-}
-
-.file-item {
-    background-color: #e1e1e1;
-    padding: 8px 12px; 
-    margin-bottom: 5px;
-    border-radius: 4px;
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-}
-
-.file-item::after {
-    content: '✔'; 
-    color: green; 
     font-weight: bold;
-    margin-left: 8px; 
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.form-group input[type="file"],
+.form-group input[type="text"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.review-details {
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.review-details h3 {
+    color: #0056b3;
+    margin-bottom: 10px;
+}
+
+
+.details-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .details-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 50%; /* Each column takes up half the width */
+    padding-right: 20px; 
+  }
+  
+  /* If you need a separator between columns */
+  .details-column:not(:last-child)::after {
+    content: '';
+    display: block;
+    margin-left: 20px;
+    background-color: #ccc;
+    width: 1px;
+    height: auto;
+    align-self: center;
+  }
+
+
+  .file-list {
+    margin: 15px 0;
+  }
+  
+  .file-item {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .file-details {
+    flex-grow: 1;
+  }
+  
+  .file-name {
+    font-weight: bold;
+    display: block; 
+  }
+  
+  .file-size {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .file-type {
+    font-size: 0.9em;
+    margin-top: 4px; 
+  }
+  
+  .main-application {
+    color: #4CAF50;
+  }
+  
+  .supporting-document {
+    color: #FFC107;
+  }
+  
+  .file-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .file-actions button {
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+
+.form-action-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.submit-btn,
+.review-btn {
+    font-weight: bold;
+    padding: 12px 0;
+    margin: 15px 0;
+    cursor: pointer;
+    border: none;
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    border-radius: 4px;
 }
 
 .submit-btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
     background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+    padding: 10px 15px;
 }
 
-.submit-btn:hover {
-    background-color: #0056b3;
+.review-btn {
+    background-color: #28a745;
+    padding: 10px 15px;
+}
+
+.review-results-form {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .compliance-tests h3 {
+    margin-bottom: 15px;
+  }
+  
+  .compliance-tests ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .compliance-tests ul li {
+    background: #f2f2f2;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1em;
+  }
+  
+  .compliance-tests ul li .status {
+    font-weight: bold;
+  }
+  
+  .pending {
+    color: #ffc107; 
+  }
+  
+  .loading-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1000; 
 }

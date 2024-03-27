@@ -23,7 +23,7 @@ public class AWSFileStorageService {
         // Generate the unique key for the file in the S3 bucket
         String keyName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
 
-        // Create metadata for your file
+        // Create metadata for the file
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
         metadata.setContentType(file.getContentType());
@@ -32,7 +32,8 @@ public class AWSFileStorageService {
         s3Client.putObject(new PutObjectRequest(bucketName, keyName, file.getInputStream(), metadata));
 
         // Construct the file URL
-        // Note: This URL generation assumes that the bucket is public. For private buckets, use S3's SDK to generate a pre-signed URL when needed.
+        // Note to self : This URL generation is for a public bucket.
+        // remember to  use S3's SDK to generate a pre-signed URL after changing the bucket to private
         String fileUrl = "https://" + bucketName + ".s3." + Regions.DEFAULT_REGION.getName() + ".amazonaws.com/" + keyName;
 
         return fileUrl;

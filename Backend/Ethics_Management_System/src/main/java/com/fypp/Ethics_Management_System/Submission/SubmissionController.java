@@ -42,7 +42,8 @@ public class SubmissionController {
         User user = userService.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not authenticated"));
 
-        SubmissionDTO submissionDTO = submissionService.createSubmission(files, user.getId(), faculty, department, studentId);
+        SubmissionDTO submissionDTO = submissionService.createSubmission(files, user.getId(),
+                                                             faculty, department, studentId);
 
         return ResponseEntity.ok(submissionDTO);
     }

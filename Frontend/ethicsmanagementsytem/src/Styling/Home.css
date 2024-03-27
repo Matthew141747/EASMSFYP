@@ -34,7 +34,7 @@ button {
     cursor: pointer;
     font-size: 16px;
     display: inline-block; /* Aligns button properly with text */
-    text-decoration: none; /* If using <a> instead of <button> */
+    text-decoration: none; 
 }
 
 button:hover {

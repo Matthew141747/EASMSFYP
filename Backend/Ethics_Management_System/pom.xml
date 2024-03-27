@@ -81,15 +81,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
-			<version>9.0.82</version>
-		</dependency>
+			 9.0.82
+			<version>10.1.16</version>
+		</dependency>-->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
-			<version>10.1.15</version>
+			<version>10.1.16</version>
 		</dependency>
 
 		<!-- Logging -->
@@ -106,6 +108,14 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
 			<version>1.12.429</version>
+		</dependency>
+
+		<!-- Apache PDFBox library for working with PDF documents -->
+
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.24</version>
 		</dependency>
 
 	</dependencies>

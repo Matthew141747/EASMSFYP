@@ -80,7 +80,7 @@ function SubmissionDashboard() {
             
             fetch(correctEndpoint, {
                 method: 'GET',
-                // Additional headers if needed
+                
             })
             .then(response => response.blob())
             .then(blob => {
@@ -113,7 +113,7 @@ function SubmissionDashboard() {
         setItemsPerPage(newItemsPerPage);
         setCurrentPage(1); // Reset to the first page, index starts at 0
         // You may need to call fetchSubmissions here to reload the data
-        //fetchSubmissions(); // You might need to modify fetchSubmissions to not use useCallback or to properly handle the change in items per page
+        //fetchSubmissions(); 
     };
 
       // Adjust the button handlers to handle the user-friendly pagination
@@ -188,8 +188,8 @@ function SubmissionDashboard() {
                         <td>{submission.faculty}</td>
                         <td>{submission.department}</td>
                         <td>{formatDate(submission.submissionDate)}</td>                        
-                        <td>{submission.reviewStatus}</td> {/* Replace with actual status */}
-                        <td>{submission.fileMetadataList?.length || 0}</td> {/* Use optional chaining */}
+                        <td>{submission.reviewStatus}</td> 
+                        <td>{submission.fileMetadataList?.length || 0}</td> 
                         <td>
                             <button onClick={() => selectSubmission(submission)}>
                             View Details

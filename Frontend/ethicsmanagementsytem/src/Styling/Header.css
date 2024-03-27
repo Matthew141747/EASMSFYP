@@ -1,11 +1,11 @@
 .main-header {
-    background-color: #227425; /* Green color */
+    background-color: #227425; 
     color: white;
     padding: 15px 30px;
     display: flex;
-    justify-content: center; /* Center the items */
+    justify-content: center; 
     align-items: center;
-    position: relative; /* Needed for absolute positioning of children */
+    position: relative; 
 }
 
 .nav-links {
