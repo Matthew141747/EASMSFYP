@@ -4,8 +4,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function SubmissionDashboard() {
+    //const accountType = localStorage.getItem('accountType'); // Retrieve the account type from localStorage
+
     const [submissions, setSubmissions] = useState([]);
-    const [selectedSubmission, setSelectedSubmission] = useState(null);
+    const [selectedSubmissions, setSelectedSubmissions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
     //state variables for pagination and filtering
@@ -18,15 +20,19 @@ function SubmissionDashboard() {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
+    // Sorting Variables
+    const [sortOrder, setSortOrder] = useState('recent'); 
+    const [reviewStatusFilter, setReviewStatusFilter] = useState('');
 
+    const [displayedSubmissions, setDisplayedSubmissions] = useState([]);
 
-
-    const fetchSubmissions = useCallback(async () => {
-        let queryParams = `?page=${currentPage - 1}&size=${itemsPerPage}`;
+    const fetchSubmissions = useCallback(async (sortOrderParam = sortOrder) => {
+        let queryParams = `?page=${currentPage - 1}&size=${itemsPerPage}&sort=${sortOrderParam}`;
         if (facultyFilter) queryParams += `&faculty=${facultyFilter}`;
         if (startDate) queryParams += `&startDate=${startDate.toISOString().split('T')[0]}`;
         if (endDate) queryParams += `&endDate=${endDate.toISOString().split('T')[0]}`;
-        
+        if (reviewStatusFilter) queryParams += `&reviewStatus=${reviewStatusFilter}`;
+
         const token = localStorage.getItem('userToken');
         try {
             const response = await fetch(`http://localhost:8080/api/submissions/All${queryParams}`, {
@@ -47,25 +53,44 @@ function SubmissionDashboard() {
             setTotalSubmissions(data.totalElements);
         } catch (error) {
             console.error('Failed to fetch submissions:', error);
-            // Handle the error state here
         }
-    }, [currentPage, itemsPerPage, facultyFilter, startDate, endDate]);
+    }, [currentPage, itemsPerPage, facultyFilter, startDate, endDate, sortOrder, reviewStatusFilter]);
   
     useEffect(() => {
         fetchSubmissions();
     }, [fetchSubmissions]);
 
     
+   // Sort and filter the fetched submissions.
+   
+    useEffect(() => {
+        let sortedSubmissions = sortSubmissionsByDate(submissions, sortOrder);
+        let filteredSubmissions = filterSubmissionsByReviewStatus(sortedSubmissions, reviewStatusFilter);
+        setDisplayedSubmissions(filteredSubmissions);
+    }, [submissions, sortOrder, reviewStatusFilter]);
+
+    
+    
+    //Select Submission to be displayed below table
+    const selectSubmission = (submission) => {
+        if (selectedSubmissions.length < 3 && !selectedSubmissions.find(sub => sub.submissionId === submission.submissionId)) {
+            setSelectedSubmissions(prevSubmissions => [...prevSubmissions, submission]);
+        }
+    };
+     //Remove that selected Submission
+    const removeSelectedSubmission = (submissionIdToRemove) => {
+        setSelectedSubmissions(selectedSubmissions.filter(sub => sub.submissionId !== submissionIdToRemove));
+
+    };
+
+    //For Search bar, not yet implemented
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
         // TODO: Implement search functionality
     };
 
-    const selectSubmission = (submission) => {
-        setSelectedSubmission(submission);
-        // TODO: Display the details of the selected submission
-    };
 
+    //Donwload Files of Selected Submission
     const downloadFiles = (submissionId) => {
         // Find the submission by ID
         const submission = submissions.find(sub => sub.submissionId === submissionId);
@@ -101,6 +126,15 @@ function SubmissionDashboard() {
             .catch(error => console.error('Error downloading file:', error));
         });
     };
+
+      // Functions to handle track and reject 
+    const trackSubmission = (submissionId) => {
+        
+    };
+
+    const rejectSubmission = (submissionId) => {
+       
+    };
     
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -112,11 +146,10 @@ function SubmissionDashboard() {
         const newItemsPerPage = Number(event.target.value);
         setItemsPerPage(newItemsPerPage);
         setCurrentPage(1); // Reset to the first page, index starts at 0
-        // You may need to call fetchSubmissions here to reload the data
         //fetchSubmissions(); 
     };
 
-      // Adjust the button handlers to handle the user-friendly pagination
+      // Adjust the button handlers 
       const handlePreviousClick = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
@@ -129,7 +162,31 @@ function SubmissionDashboard() {
         }
     };
 
+     // Function to sort submissions by date
+     const sortSubmissionsByDate = (submissions, sortOrder) => {
+        return [...submissions].sort((a, b) => {
+            const dateA = new Date(a.submissionDate);
+            const dateB = new Date(b.submissionDate);
+            return sortOrder === 'recent' ? dateB - dateA : dateA - dateB;
+        });
+    };
+
+    // Function to filter submissions by review status
+    const filterSubmissionsByReviewStatus = (submissions) => {
+        return reviewStatusFilter
+        ? submissions.filter(sub => sub.reviewStatus === reviewStatusFilter)
+        : submissions;
+    };
+
+    const handleSortOrderChange = (newSortOrder) => {
+        setSortOrder(newSortOrder);
+        setCurrentPage(1); 
+        fetchSubmissions(newSortOrder); 
+      };
+
+
     return (
+
         <div className="committee-dashboard">
             <div className="search-and-filter">
                 <input
@@ -140,6 +197,20 @@ function SubmissionDashboard() {
                     onChange={handleSearchChange}
                 />
                 <div className="filters">
+
+                    {/* Sorting by date */}
+                    <select value={sortOrder} onChange={e => handleSortOrderChange(e.target.value)}>
+                    <option value="recent">Most Recent</option>
+                    <option value="oldest">Oldest</option>
+                    </select>
+                    {/* Filtering by review status */}
+                    <select value={reviewStatusFilter} onChange={e => setReviewStatusFilter(e.target.value)}>
+                    <option value="">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Rejected">Rejected</option>
+                    </select>
+
                     <select value={facultyFilter} onChange={e => setFacultyFilter(e.target.value)}>
                         <option value="">Select Faculty</option>
                         <option value="arts_humanities_social_sciences">Faculty of Arts, Humanities and Social Sciences</option>
@@ -160,7 +231,7 @@ function SubmissionDashboard() {
                         className="date-picker"
                         placeholderText="End Date"
                     />
-                    <button onClick={fetchSubmissions} className="fetch-button">Show</button>
+                
                 </div>
             </div>
 
@@ -172,7 +243,9 @@ function SubmissionDashboard() {
                     <table className="submissions-table">
                     <thead>
                         <tr>
-                            <th>Student ID</th>
+                            <th>Applicant ID</th>
+                            <th>Applicant Name</th>
+                            <th>Supervisor Name</th>
                             <th>Faculty</th>
                             <th>Department</th>
                             <th>Submission Date</th>
@@ -182,9 +255,11 @@ function SubmissionDashboard() {
                         </tr>
                     </thead>
                     <tbody>
-                    {submissions.map((submission) => (
+                    {displayedSubmissions.map((submission) => (
                         <tr key={submission.submissionId}>
                         <td>{submission.studentId}</td>
+                        <td>{submission.applicantName}</td>
+                        <td>{submission.supervisorName}</td>
                         <td>{submission.faculty}</td>
                         <td>{submission.department}</td>
                         <td>{formatDate(submission.submissionDate)}</td>                        
@@ -201,6 +276,38 @@ function SubmissionDashboard() {
                 </table>
 
                 </div>
+
+                <div className="selected-submissions-container">
+                {selectedSubmissions.map((submission, index) => (
+                    <div key={index} className="submission-details">
+                        <p>Applicant ID: {submission.studentId}</p>
+                        <p>Faculty: {submission.faculty}</p>
+                        <p>Department: {submission.department}</p>
+                        <p>Number of Files: {submission.fileMetadataList?.length || 0}</p>
+                        <ul>
+                            {submission.fileMetadataList?.map(file => (
+                                <li key={file.id}>
+                                    {file.fileName} - {file.fileType}
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="submission-actions">
+                            <button onClick={() => downloadFiles(submission.submissionId)}>
+                                Download Files
+                            </button>
+                            <button onClick={() => trackSubmission(submission.submissionId)}>
+                                Track Submission
+                            </button>
+                            <button onClick={() => rejectSubmission(submission.submissionId)}>
+                                Reject Submission
+                            </button>
+                            <button onClick={() => removeSelectedSubmission(submission.submissionId)} className="remove-btn">
+                                   &#x2715; 
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
 
                 <div className="pagination-controls">
@@ -224,27 +331,12 @@ function SubmissionDashboard() {
                 </div>
             </div>
 
-            </div>
 
-            {selectedSubmission && (
-                 <div className="submission-details">
-                 <p>Student ID: {selectedSubmission.studentId}</p>
-                 <p>Faculty: {selectedSubmission.faculty}</p>
-                 <p>Department: {selectedSubmission.department}</p>
-                 <p>Number of Files: {selectedSubmission.fileMetadataList?.length || 0}</p>
-                 <ul>
-                     {selectedSubmission.fileMetadataList?.map(file => (
-                         <li key={file.id}>
-                             {file.fileName} - {file.fileType}
-                         </li>
-                     ))}
-                 </ul>
-                 <button onClick={() => downloadFiles(selectedSubmission.submissionId)}>
-                     Download Files
-                 </button>
-             </div>
-            )}
+
+
+            </div>
         </div>
+
     );
 }
 

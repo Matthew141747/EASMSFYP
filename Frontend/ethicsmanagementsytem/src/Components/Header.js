@@ -3,16 +3,34 @@ import { Link } from 'react-router-dom';
 import '../Styling/Header.css'
 
 
-const Header = ({ isLoggedIn, username, onLogout }) => {
+const Header = ({ isLoggedIn, username, onLogout, accountType }) => {
+
+     // Define a list of links for admin and faculty
+     const adminFacultyLinks = (
+        <>
+            <li><Link to="/Profile">Profile</Link></li>
+            <li><Link to="/SubmissionDashboard">Submission Dashboard</Link></li>
+            <li><Link to="/Analytics">Analytics</Link></li>
+            <li><Link to="/Submission">Submission</Link></li>
+        </>
+    );
+
+    // Define a list of links for applicants
+    const applicantLinks = (
+        <>
+            <li><Link to="/Submission">Submission</Link></li>
+            <li><Link to="/Profile">Profile</Link></li>
+        </>
+    );
+
+    
     return (
         <header className="main-header">
             <nav className="nav-container">
                 <ul className="nav-links">
                     <li><Link to="/Home">Home</Link></li>
-                    <li><Link to="/Profile">Profile</Link></li>
-                    <li><Link to="/Submission">Submission</Link></li>
-                    <li><Link to="/SubmissionDashboard">Submission Dashboard</Link></li>
-                    <li><Link to="/Analytics">Analytics</Link></li>
+                    {isLoggedIn && (accountType === 'admin' || accountType === 'faculty') && adminFacultyLinks}
+                    {isLoggedIn && accountType === 'applicant' && applicantLinks}
                     <li><Link to="/about">About</Link></li>
                 </ul>
                 <h1 className="header-title">Ethics Application Portal</h1>
@@ -32,6 +50,5 @@ const Header = ({ isLoggedIn, username, onLogout }) => {
         </header>
     );
 };
-
 
 export default Header;

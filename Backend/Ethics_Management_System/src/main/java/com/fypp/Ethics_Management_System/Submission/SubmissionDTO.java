@@ -28,7 +28,8 @@ public class SubmissionDTO {
         this.fileMetadataList = fileMetadataList;
     }
 
-    public SubmissionDTO(Long submissionId, int userId, List<FileDTO> fileMetadataList, String department, String faculty, String studentId, LocalDateTime submissionDate) {
+    public SubmissionDTO(Long submissionId, int userId, List<FileDTO> fileMetadataList, String department, String faculty, String studentId, LocalDateTime submissionDate, String reviewStatus,
+                         String applicantName, String supervisorName) {
         this.submissionId = submissionId;
         this.userId = userId;
         this.fileMetadataList = fileMetadataList;
@@ -36,6 +37,9 @@ public class SubmissionDTO {
         this.department = department;
         this.faculty = faculty;
         this.submissionDate = submissionDate;
+        this.reviewStatus = reviewStatus;
+        this.applicantName = applicantName;
+        this.supervisorName = supervisorName;
     }
 
     private Long submissionId;
@@ -78,5 +82,34 @@ public class SubmissionDTO {
     private String department;
     private String studentId;
     private LocalDateTime submissionDate;
+
+    private String reviewStatus;
+    private String applicantName;
+    private String supervisorName;
+
+    // New field getters and setters
+    public String getReviewStatus() {
+        return reviewStatus;
+    }
+
+    public void setReviewStatus(String reviewStatus) {
+        this.reviewStatus = reviewStatus;
+    }
+
+    public String getApplicantName() {
+        return applicantName;
+    }
+
+    public void setApplicantName(String applicantName) {
+        this.applicantName = applicantName;
+    }
+
+    public String getSupervisorName() {
+        return supervisorName;
+    }
+
+    public void setSupervisorName(String supervisorName) {
+        this.supervisorName = supervisorName;
+    }
 
 }

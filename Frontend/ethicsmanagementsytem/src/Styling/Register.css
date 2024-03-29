@@ -1,45 +1,89 @@
-.register-form-container {
+.register-container {
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
-.register-form {
-    width: 300px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+.register-card {
+    width: 400px; /* Set width to match the login card */
+    padding: 2rem;
+    margin: 1rem auto;
+    background-color: #f8f9fa; /* Light green background like the login card */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
-    margin-bottom: 15px;
+.register-card h2 {
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: bold;
 }
 
-label {
+.register-card p {
+    margin-bottom: 2rem;
+    color: #555;
+}
+
+
+
+.alert {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+
+.button-grid {
+    margin-top: 1rem;
+}
+
+
+.btn-primary {
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.05rem;
+}
+
+
+.extra-actions {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.extra-actions a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 0.9rem;
+}
+
+.extra-actions a:hover {
+    color: #0056b3;
+}
+
+
+.form-label {
     display: block;
-    margin-bottom: 5px;
+    color: #495057;
+    margin-bottom: 0.5rem;
 }
 
-input {
+.form-control {
+    box-sizing: border-box;
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 3px;
-    background-color: #3498db;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
 
-button:hover {
-    background-color: #2980b9;
+.spinner-border {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
 }

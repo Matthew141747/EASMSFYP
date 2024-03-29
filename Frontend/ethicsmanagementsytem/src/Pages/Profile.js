@@ -121,11 +121,6 @@ const Profile = () => {
                     </div>
                 </div>
                 </div>
-                <div className="tracked-submissions-section">
-                    <h3>Tracked Submissions</h3>
-                    {/* Similar structure to submissions-section */}
-                </div>
-
                 <div className="notification-options-section">
                     <h3>Notification Options</h3>
                     <label>

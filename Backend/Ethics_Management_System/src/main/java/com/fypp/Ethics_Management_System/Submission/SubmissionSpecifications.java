@@ -19,5 +19,12 @@ public class SubmissionSpecifications {
         };
     }
 
-    // You can add more specifications here based on other filters
+    public static Specification<Submission> withReviewStatus(String reviewStatus) {
+        return (root, query, criteriaBuilder) -> {
+            if (reviewStatus == null || reviewStatus.isEmpty()) {
+                return criteriaBuilder.conjunction(); // no condition
+            }
+            return criteriaBuilder.equal(root.get("reviewStatus"), reviewStatus);
+        };
+    }
 }

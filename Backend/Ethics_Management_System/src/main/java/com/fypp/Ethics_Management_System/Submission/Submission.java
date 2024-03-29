@@ -77,6 +77,15 @@ public class Submission {
     @Column(nullable = false)
     private String studentId;
 
+    @Column(name = "review_status", nullable = false)
+    private String reviewStatus = "Pending";  // Default value
+
+    @Column(name = "applicant_name")
+    private String applicantName;
+
+    @Column(name = "supervisor_name")
+    private String supervisorName;
+
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<File> files = new HashSet<>();
 
@@ -91,6 +100,32 @@ public class Submission {
     }
     public Set<File> getFiles() {
         return files;
+    }
+
+
+    // Getters and setters for new columns
+    public String getReviewStatus() {
+        return reviewStatus;
+    }
+
+    public void setReviewStatus(String reviewStatus) {
+        this.reviewStatus = reviewStatus;
+    }
+
+    public String getApplicantName() {
+        return applicantName;
+    }
+
+    public void setApplicantName(String applicantName) {
+        this.applicantName = applicantName;
+    }
+
+    public String getSupervisorName() {
+        return supervisorName;
+    }
+
+    public void setSupervisorName(String supervisorName) {
+        this.supervisorName = supervisorName;
     }
 
 }

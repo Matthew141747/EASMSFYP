@@ -21,25 +21,25 @@ public class ApplicationValidator {
     private static boolean checkSignatures(Optional<ExpeditedEthicsApplication.Declaration> optionalDeclaration) {
         System.out.println("Checking signatures");
 
-        boolean result = optionalDeclaration.map(declaration -> {
-            try {
-                System.out.println("Checking individual signatures");
-                boolean applicantSignature1Valid = Optional.ofNullable(declaration.getApplicantSignature1()).map(signature -> !signature.getSignatureId().isEmpty()).orElse(false);
-                boolean applicantSignature2Valid = Optional.ofNullable(declaration.getApplicantSignature2()).map(signature -> !signature.getSignatureId().isEmpty()).orElse(false);
-                boolean supervisorSignatureValid = Optional.ofNullable(declaration.getSupervisorSignature()).map(signature -> !signature.getSignatureId().isEmpty()).orElse(false);
+        // Use optionalDeclaration.isPresent() to check if declaration is present
+        return optionalDeclaration.map(declaration -> {
+                    // Now you can safely assume that declaration is not null
+                    boolean applicantSignature1Valid = Optional.ofNullable(declaration.getApplicantSignature1())
+                            .map(signature -> signature.getSignatureId() != null && !signature.getSignatureId().trim().isEmpty())
+                            .orElse(false);
+                    boolean applicantSignature2Valid = Optional.ofNullable(declaration.getApplicantSignature2())
+                            .map(signature -> signature.getSignatureId() != null && !signature.getSignatureId().trim().isEmpty())
+                            .orElse(false);
+                    boolean supervisorSignatureValid = Optional.ofNullable(declaration.getSupervisorSignature())
+                            .map(signature -> signature.getSignatureId() != null && !signature.getSignatureId().trim().isEmpty())
+                            .orElse(false);
 
-                System.out.println("Signatures validation results - Applicant 1: " + applicantSignature1Valid + ", Applicant 2: " + applicantSignature2Valid + ", Supervisor: " + supervisorSignatureValid);
+                    System.out.println("Signatures validation results - Applicant 1: " + applicantSignature1Valid + ", Applicant 2: " + applicantSignature2Valid + ", Supervisor: " + supervisorSignatureValid);
 
-                return applicantSignature1Valid && applicantSignature2Valid && supervisorSignatureValid;
-            } catch (Exception e) {
-                System.out.println("Exception in checkSignatures: " + e.getMessage());
-                e.printStackTrace(); // For detailed stack trace in logs
-                return false;
-            }
-        }).orElse(false);
-
-        System.out.println("Signatures check result: " + result);
-        return result;
+                    // If all signatures are valid (not null and not empty), return true
+                    return applicantSignature1Valid && applicantSignature2Valid && supervisorSignatureValid;
+                })
+                .orElse(false); // If the optionalDeclaration is not present, return false
     }
 
     private static boolean checkDocumentUse(Optional<ExpeditedEthicsApplication.SubjectMatterDetails> optionalSubjectMatterDetails, Optional<ExpeditedEthicsApplication.StudyProcedures> optionalStudyProcedures) {

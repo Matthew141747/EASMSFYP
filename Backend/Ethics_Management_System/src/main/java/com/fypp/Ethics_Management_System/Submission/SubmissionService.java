@@ -38,13 +38,15 @@ public class SubmissionService {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     @Transactional
-    public SubmissionDTO createSubmission(Set<MultipartFile> files, int userId, String faculty, String department, String studentId) {
+    public SubmissionDTO createSubmission(Set<MultipartFile> files, int userId, String faculty, String department, String studentId, String applicantName, String supervisorName) {
         Submission submission = new Submission();
         submission.setUserId(userId);
         submission.setSubmissionDate(LocalDateTime.now());
         submission.setFaculty(faculty);
         submission.setDepartment(department);
         submission.setStudentId(studentId);
+        submission.setApplicantName(applicantName);
+        submission.setSupervisorName(supervisorName);
 
         files.forEach(file -> {
             File fileEntity = new File();
@@ -66,8 +68,8 @@ public class SubmissionService {
         return convertToSubmissionDTO(submission);
     }
 
-    public Page<SubmissionDTO> findAllSubmissions(Optional<String> faculty, Optional<LocalDate> startDate, Optional<LocalDate> endDate, Pageable pageable) {
-        // Convert LocalDate to LocalDateTime as needed
+    public Page<SubmissionDTO> findAllSubmissions(Optional<String> faculty, Optional<LocalDate> startDate, Optional<LocalDate> endDate, Pageable pageable,  Optional<String> reviewStatus) {
+        // Convert LocalDate to LocalDateTime
         LocalDateTime startDateTime = startDate.map(date -> date.atStartOfDay()).orElse(null);
         LocalDateTime endDateTime = endDate.map(date -> date.atTime(23, 59, 59)).orElse(null);
 
@@ -75,8 +77,8 @@ public class SubmissionService {
         logger.info("Converted startDate: {}, endDate: {}", startDateTime, endDateTime);
 
         Specification<Submission> spec = Specification.where(SubmissionSpecifications.withFaculty(faculty.orElse("")))
-                .and(SubmissionSpecifications.withinDateRange(startDateTime, endDateTime));
-
+                .and(SubmissionSpecifications.withinDateRange(startDateTime, endDateTime))
+                .and(SubmissionSpecifications.withReviewStatus(reviewStatus.orElse("")));
         // Log the specification result
         logger.debug("Specifications: withFaculty: {}, withinDateRange: {} to {}", faculty.orElse("None"), startDateTime, endDateTime);
 
@@ -94,7 +96,7 @@ public class SubmissionService {
                 .map(this::convertToFileDTO)
                 .collect(Collectors.toList());
 
-        return new SubmissionDTO(submission.getId(), submission.getUserId(), fileDTOs, submission.getDepartment(), submission.getFaculty(), submission.getStudentId(), submission.getSubmissionDate());
+        return new SubmissionDTO(submission.getId(), submission.getUserId(), fileDTOs, submission.getDepartment(), submission.getFaculty(), submission.getStudentId(), submission.getSubmissionDate(), submission.getReviewStatus(), submission.getApplicantName(), submission.getSupervisorName());
     }
 
     private FileDTO convertToFileDTO(File file) {

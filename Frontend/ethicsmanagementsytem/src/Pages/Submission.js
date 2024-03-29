@@ -1,15 +1,28 @@
 import '../Styling/SubmissionPage.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SubmissionPage() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [faculty, setFaculty] = useState('');
     const [department, setDepartment] = useState('');
     const [studentId, setStudentId] = useState('');
+    const [applicantName, setApplicantName] = useState('');
+    const [supervisorName, setSupervisorName] = useState('');
+
     const token = localStorage.getItem('userToken');
     const [parsedData, setParsedData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [reviewResults, setReviewResults] = useState(null);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Redirect user to login page if not logged in
+        if (!token) {
+            navigate('/login');
+        }
+    }, [token, navigate]); // The effect will run on component mount and whenever the token changes
 
     const handleReview = async () => {
         setIsLoading(true); // Start loading
@@ -35,8 +48,9 @@ function SubmissionPage() {
                 const jsonResponse  = await response.json();
                 setParsedData(jsonResponse.application);
                 setReviewResults(jsonResponse.validationResults);
-                console.log(parsedData);
-                console.log(reviewResults);
+                //setApplicantName(parsedData.supervisorApplicantDetails.applicantName);
+                //setSupervisorName(parsedData.supervisorApplicantDetails.supervisorName);
+                
             } else {
                 setParsedData(`Failed to review document. Status: ${response.status}`);
             }
@@ -47,6 +61,21 @@ function SubmissionPage() {
             setIsLoading(false); // End loading
         }
     };
+
+    useEffect(() => {
+        console.log(parsedData);
+        console.log(reviewResults);
+        // Since parsedData is an object and might be updated partially,
+        // we need to check for the nested properties before trying to access them
+        if (parsedData?.supervisorApplicantDetails) {
+          setApplicantName(parsedData.supervisorApplicantDetails.applicantName);
+          setSupervisorName(parsedData.supervisorApplicantDetails.supervisorName);
+          setStudentId(parsedData.supervisorApplicantDetails.applicantID);
+
+          console.log(applicantName);
+          console.log(supervisorName);
+        }
+      }, [parsedData, reviewResults, applicantName, supervisorName]); // Only r
 
     const handleFileChange = (event) => {
         const newFiles = Array.from(event.target.files).map(file => ({
@@ -111,6 +140,8 @@ function SubmissionPage() {
         formData.append('faculty', faculty);
         formData.append('department', department);
         formData.append('studentId', studentId);
+        formData.append('applicantName', applicantName);
+        formData.append('supervisorName', supervisorName);
 
         
         selectedFiles.forEach(fileDetail => {

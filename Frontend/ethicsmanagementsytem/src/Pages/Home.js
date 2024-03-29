@@ -1,4 +1,3 @@
-import Header from "../Components/Header";
 import '../Styling/Home.css'; 
 
 export default function Home() {

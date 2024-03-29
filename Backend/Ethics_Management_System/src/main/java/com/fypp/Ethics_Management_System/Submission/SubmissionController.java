@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,33 +39,51 @@ public class SubmissionController {
                                              @RequestParam("faculty") String faculty,
                                              @RequestParam("department") String department,
                                              @RequestParam("studentId") String studentId,
+                                             @RequestParam("applicantName") String applicantName,
+                                             @RequestParam("supervisorName") String supervisorName,
                                              Authentication authentication) {
 
         User user = userService.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not authenticated"));
 
         SubmissionDTO submissionDTO = submissionService.createSubmission(files, user.getId(),
-                                                             faculty, department, studentId);
+                                                             faculty, department, studentId, applicantName,supervisorName);
 
         return ResponseEntity.ok(submissionDTO);
     }
 
     @GetMapping("/All")
+    @PreAuthorize("hasAnyAuthority('ROLE_FACULTY', 'ROLE_ADMIN')") // Only allow users with ROLE_FACULTY or ROLE_ADMIN
     public ResponseEntity<Page<SubmissionDTO>> getAllSubmissions(
             @RequestParam Optional<String> faculty,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> endDate,
             @RequestParam("page") int page,
-            @RequestParam("size") int size) {
-        //Pageable pageable
-        //@PageableDefault(size = 10)
-        //pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize(), pageable.getSort());
+            @RequestParam("size") int size,
+            @RequestParam Optional<String> sort,
+            @RequestParam Optional<String> reviewStatus
+    ) {
+        // Determine the direction of the sorting based on the 'sort' parameter
+        Sort.Direction sortDirection = sort.isPresent() && "oldest".equals(sort.get())
+                ? Sort.Direction.ASC : Sort.Direction.DESC;
 
-        Pageable pageable = PageRequest.of(page, size);
-        logger.info("Received pageable: page {}, size {}", pageable.getPageNumber(), pageable.getPageSize());
+        // Create a Sort object with "submissionDate" and "reviewStatus"
+        Sort sortObj = Sort.by(sortDirection, "submissionDate");
+        if (reviewStatus.isPresent()) {
+            sortObj = sortObj.and(Sort.by(sortDirection, "reviewStatus"));
 
-        Page<SubmissionDTO> submissionPage  = submissionService.findAllSubmissions(faculty, startDate, endDate, pageable);
-        return ResponseEntity.ok(submissionPage );
+        }
+        // Create Pageable instance with sorting direction
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+
+        // Log the received parameters
+        logger.info("Received pageable: page {}, size {}, sort {}", pageable.getPageNumber(), pageable.getPageSize(), sort.orElse("recent"));
+
+        // Call the service method with the updated pageable (including sorting)
+        Page<SubmissionDTO> submissionPage = submissionService.findAllSubmissions(faculty, startDate, endDate, pageable, reviewStatus);
+
+        // Return the paginated and sorted submissions
+        return ResponseEntity.ok(submissionPage);
     }
 
     @GetMapping("/userSubmissions")
