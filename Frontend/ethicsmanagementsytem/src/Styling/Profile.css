@@ -1,4 +1,4 @@
-.profile-container {
+.profile-page .profile-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
@@ -6,7 +6,7 @@
     max-width: 1200px;
 }
 
-h3 {
+.profile-page h3 {
     margin-bottom: 15px;
 }
 
@@ -19,7 +19,7 @@ h3 {
     background-color: #eaeaea;
 }
 
-.profile-pic-container {
+.profile-page .profile-pic-container {
     width: 100px; /* Profile picture size */
     height: 100px; /* Profile picture size */
     border-radius: 50%;
@@ -27,22 +27,22 @@ h3 {
     margin: 0 auto 20px; /* Center the profile picture and add spacing below */
 }
 
-.profile-pic {
+.profile-page .profile-pic {
     width: 100%;
     height: auto;
 }
 
-.detail-with-icon {
+.profile-page .detail-with-icon {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.detail-with-icon .icon {
+.profile-page .detail-with-icon .icon {
     margin-right: 10px;
 }
 
-.edit-details-btn {
+.profile-page .edit-details-btn {
     padding: 8px 16px;
     background-color: #007bff;
     color: white;
@@ -59,7 +59,7 @@ h3 {
 }
 
 
-.user-details-section, .submissions-section, .tracked-submissions-section {
+.profile-page .user-details-section, .submissions-section, .tracked-submissions-section {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -67,14 +67,14 @@ h3 {
     position: relative;
 }
 
-.submission-card {
+.profile-page .submission-card {
     border: 1px solid #eee;
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 10px;
 }
 
-.profile-card {
+.profile-page .profile-card {
     width: 350px; /* Adjusted width */
     padding: 20px;
     border: 1px solid #ccc;
@@ -84,19 +84,19 @@ h3 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.profile-detail {
+.profile-page .profile-detail {
     display: flex;
     align-items: center;
     margin-bottom: 10px; /* Space between profile details */
 }
 
-.profile-detail .icon {
+.profile-page .profile-detail .icon {
     margin-right: 10px; /* Space between icon and text */
     width: 20px; /* Icon size */
     height: 20px; /* Icon size */
 }
 
-button {
+.profile-page button {
     margin-top: 10px; /* Space above the button */
     padding: 8px 16px;
     border: none;
@@ -106,13 +106,13 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.profile-page button:hover {
     background-color: #0056b3;
 }
 
 
 
-.submission-info {
+.profile-page .submission-info {
     border: 1px solid #eee;
     border-radius: 8px;
     padding: 15px;
@@ -121,7 +121,7 @@ button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.submission-status, .notification-options {
+.profile-page .submission-status, .notification-options {
     padding: 15px;
     margin-top: 20px; /* Space above the sections */
     border: 1px solid #ccc;
@@ -130,25 +130,25 @@ button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.notification-options {
+.profile-page .notification-options {
     margin-top: 10px; /* Additional spacing from the submission status */
 }
 
-.notification-options h3 {
+.profile-page .notification-options h3 {
     margin-bottom: 10px; /* Space between title and options */
 }
 
-.notification-options label {
+.profile-page .notification-options label {
     display: flex;
     align-items: center;
     cursor: pointer; /* Make the label text clickable as well */
 }
 
-.notification-options input[type="checkbox"] {
+.profile-page .notification-options input[type="checkbox"] {
     margin-right: 10px; /* Space between checkbox and label text */
 }
 
-.notification-options-section {
+.profile-page .notification-options-section {
     max-width: 600px;
     background-color: #fff;
     border-radius: 8px;
@@ -157,7 +157,7 @@ button:hover {
 }
 
 
-.pagination-controls {
+.profile-page .pagination-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -167,13 +167,13 @@ button:hover {
     border-radius: 0 0 8px 8px;
 }
 
-.pagination-controls button {
+.profile-page .pagination-controls button {
     padding: 5px 10px;
     font-size: 0.9rem;
     border-radius: 4px;
     border: 1px solid #ccc;
 }
 
-.pagination-controls span {
+.profile-page .pagination-controls span {
     font-size: 0.9rem;
 }

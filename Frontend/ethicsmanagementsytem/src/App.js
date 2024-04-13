@@ -12,6 +12,7 @@ import Analytics from './Pages/Analytics'
 import Registration from './Pages/Registration'
 import LoginForm from './Pages/Login';
 import SubmissionDashboard from './Pages/SubmissionDashboard';
+import SubmissionTracker from './Pages/SubmissionTracker';
 
 export function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,6 +61,7 @@ export function App() {
                 accountType={accountType}
                 />
                 <Routes>
+                    <Route path="/" element={<Navigate to="/home" replace />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/about" element = {<About/>} />
                     <Route path="/profile" element = {<Profile/>} />
@@ -67,6 +69,13 @@ export function App() {
                     <Route path='/submissionDashboard' element={
                         isLoggedIn && (accountType === 'faculty' || accountType === 'admin') ? (
                             <SubmissionDashboard />
+                        ) : (
+                            <Navigate to="/login" />
+                        )
+                    } />
+                    <Route path='/SubmissionTracker' element={
+                        isLoggedIn && (accountType === 'faculty' || accountType === 'admin') ? (
+                            <SubmissionTracker />
                         ) : (
                             <Navigate to="/login" />
                         )

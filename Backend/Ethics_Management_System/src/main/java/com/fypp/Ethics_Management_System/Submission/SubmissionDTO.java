@@ -28,6 +28,9 @@ public class SubmissionDTO {
         this.fileMetadataList = fileMetadataList;
     }
 
+    //Added for tracked submissions dashboard
+    private List<String> folderNames;
+
     public SubmissionDTO(Long submissionId, int userId, List<FileDTO> fileMetadataList, String department, String faculty, String studentId, LocalDateTime submissionDate, String reviewStatus,
                          String applicantName, String supervisorName) {
         this.submissionId = submissionId;
@@ -40,6 +43,23 @@ public class SubmissionDTO {
         this.reviewStatus = reviewStatus;
         this.applicantName = applicantName;
         this.supervisorName = supervisorName;
+        this.folderNames = null;
+    }
+
+    //Overloaded for Tracked Submission dashboard
+    public SubmissionDTO(Long submissionId, int userId, List<FileDTO> fileMetadataList, String department, String faculty, String studentId, LocalDateTime submissionDate, String reviewStatus,
+                         String applicantName, String supervisorName, List<String> folderNames) {
+        this.submissionId = submissionId;
+        this.userId = userId;
+        this.fileMetadataList = fileMetadataList;
+        this.studentId = studentId;
+        this.department = department;
+        this.faculty = faculty;
+        this.submissionDate = submissionDate;
+        this.reviewStatus = reviewStatus;
+        this.applicantName = applicantName;
+        this.supervisorName = supervisorName;
+        this.folderNames = folderNames;
     }
 
     private Long submissionId;
@@ -110,6 +130,14 @@ public class SubmissionDTO {
 
     public void setSupervisorName(String supervisorName) {
         this.supervisorName = supervisorName;
+    }
+
+    public List<String> getFolderNames() {
+        return folderNames;
+    }
+
+    public void setFolderNames(List<String> folderNames) {
+        this.folderNames = folderNames;
     }
 
 }

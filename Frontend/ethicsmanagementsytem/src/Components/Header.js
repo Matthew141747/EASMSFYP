@@ -10,6 +10,7 @@ const Header = ({ isLoggedIn, username, onLogout, accountType }) => {
         <>
             <li><Link to="/Profile">Profile</Link></li>
             <li><Link to="/SubmissionDashboard">Submission Dashboard</Link></li>
+            <li><Link to="/SubmissionTracker">Track Submissions</Link></li>
             <li><Link to="/Analytics">Analytics</Link></li>
             <li><Link to="/Submission">Submission</Link></li>
         </>

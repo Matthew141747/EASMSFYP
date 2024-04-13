@@ -128,10 +128,32 @@ function SubmissionDashboard() {
     };
 
       // Functions to handle track and reject 
-    const trackSubmission = (submissionId) => {
-        
+      const trackSubmission = async (submissionId) => {
+        const token = localStorage.getItem('userToken');
+        try {
+            // Append submissionId as a query parameter in the URL
+            const url = `http://localhost:8080/api/tracking/track?submissionId=${submissionId}`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                    // Note: 'Content-Type': 'application/json' is not needed here 
+                    // because we're not sending a JSON body anymore
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+    
+            const trackedSubmission = await response.json();
+            console.log('Submission tracked:', trackedSubmission);
+            // Handle success - maybe update state or show a success message
+        } catch (error) {
+            console.error('Failed to track submission:', error);
+            // Handle error - show error message to user
+        }
     };
-
     const rejectSubmission = (submissionId) => {
        
     };

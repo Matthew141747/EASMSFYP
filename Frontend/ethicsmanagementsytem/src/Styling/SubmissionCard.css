@@ -1,0 +1,147 @@
+/* Base styles for submission card */
+.submission-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+
+.submission-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+.submission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.submission-header h5 {
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.submission-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.move-to-folder-select,
+.update-status-select {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+.remove-button {
+  padding: 8px 12px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.remove-button:hover {
+  background-color: #c82333;
+}
+
+.submission-body {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.submission-details,
+.submission-status {
+  flex: 1;
+}
+
+.submission-details p,
+.submission-status p {
+  color: #666;
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
+.file-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.file-list li {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.file-list li:hover {
+  text-decoration: underline;
+}
+
+.submission-status {
+  align-items: flex-end;
+}
+
+.submission-actions button {
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submission-actions button:hover {
+  background-color: #218838;
+}
+
+.submission-actions button:first-child {
+  background-color: #007bff;
+}
+
+.submission-actions button:first-child:hover {
+  background-color: #0069d9;
+}
+
+@media (max-width: 768px) {
+  .submission-card {
+    flex-direction: column;
+  }
+
+  .submission-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .submission-info {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .submission-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .submission-actions button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

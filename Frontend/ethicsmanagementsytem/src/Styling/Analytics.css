@@ -1,19 +1,59 @@
 .analytics-dashboard {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 20px;
-    max-width: 100%;
-  }
-  
-  .analytics-dashboard > div {
-    max-height: 400px; 
-    max-width: 100%; 
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 20px;
+  max-width: 100%;
+}
 
-  @media (max-width: 768px) {
-    .analytics-dashboard {
-      grid-template-columns: 1fr; 
-    }
+.analytics-dashboard > div {
+  background-color: #fff; /* Change this to your desired card background */
+  border: 1px solid #e0e0e0; /* Light grey border */
+  border-radius: 8px; /* Rounded corners for the cards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
+  padding: 15px; /* spacing inside the card */
+  max-height: 400px;
+  height: 100%;
+}
+
+/* Responsive settings */
+@media (max-width: 768px) {
+  .analytics-dashboard {
+    grid-template-columns: 1fr;
   }
+}
+
+/* Style for the page heading */
+.analytics-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  /* Inline-block and max-width fit-content removed */
+}
+
+.analytics-heading-container {
+  display: flex;
+  justify-content: center; /* Centers the heading horizontally */
+  margin-top: 12px; /* Adjusted space above the title */
+  margin-bottom: 12px; /* Reduced space below the title to match the gap between charts */
+}
+
+/* Chart titles */
+.chartjs-render-monitor {
+  background-color: #f7f7f7; /* light background for the chart area */
+  border-radius: 8px;
+}
+
+/* Enhance the visibility of the title in the chart */
+.chartjs-title {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+  display: block;
+  text-align: center;
+}

@@ -6,10 +6,10 @@
 }
 
 .register-card {
-    width: 400px; /* Set width to match the login card */
+    width: 400px; 
     padding: 2rem;
     margin: 1rem auto;
-    background-color: #f8f9fa; /* Light green background like the login card */
+    background-color: #f8f9fa; 
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
