@@ -119,7 +119,6 @@ public class ParseSignatureResearchInfo {
 
         // Define regex patterns for the signatures
 
-        // Adjusted patterns to be more specific and non-greedy This works!
         Pattern applicantPattern = Pattern.compile("Applicant:\\s*Recoverable Signature\\s*X (.+?)\\s*Signed by: (.+?)\\s*(?=Date:)", Pattern.DOTALL);
 
         Pattern supervisorPattern = Pattern.compile(

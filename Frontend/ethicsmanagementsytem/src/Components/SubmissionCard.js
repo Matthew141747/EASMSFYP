@@ -17,18 +17,9 @@ useEffect(() => {
   }, [currentFolder, folders]);
 
 
-  // This button will call the onRemoveFromFolder function passed down from SubmissionTracker
-
  // console.log('Current Folder:', currentFolder);
  // console.log('Current Folder ID:', currentFolderId);
 
-  // This button will call the onRemoveFromFolder function passed down from SubmissionTracker
-  /*
-  const removeButton = currentFolder && (
-    <button onClick={() => onRemoveFromFolder(submission.submissionId, currentFolder)}>
-    Remove from "{currentFolderName}"
-    </button>
-  );*/
 
  const handleUpdateStatus = (e) => {
   const newStatus = e.target.value;
@@ -43,24 +34,6 @@ useEffect(() => {
 
       <div className="submission-header">
          <h5>{submission.title || 'Submission Title'}</h5>
-          <div className="submission-info">
-          <select className="move-to-folder-select" onChange={(e) => onMove(submission.submissionId, e.target.value)}>
-          <option value="">Move to folder...</option>
-          {folders.map(folder => (
-            <option key={folder.id} value={folder.id}>{folder.name}</option>
-          ))}
-        </select>
-        <p>Folders: {submission.folderNames.join(', ') || 'No folder'}</p>
-
-        {currentFolder && (
-          <button
-            className="remove-button"
-            onClick={() => onRemoveFromFolder(submission.submissionId, currentFolder)}
-          >
-            Remove from "{currentFolderName}"
-          </button>
-        )}
-        </div>
       </div>
 
       <div className="submission-body">
@@ -81,6 +54,8 @@ useEffect(() => {
           </div>
         </div>
 
+        <div className="submission-status-and-info">
+
         <div className="submission-status">
         <p>Current Status of Submission: {submission.reviewStatus}</p>
 
@@ -97,7 +72,30 @@ useEffect(() => {
           </div>
         </div>
 
+        <div className="submission-info">
+          <select className="move-to-folder-select" onChange={(e) => onMove(submission.submissionId, e.target.value)}>
+          <option value="">Move to folder...</option>
+          {folders.map(folder => (
+            <option key={folder.id} value={folder.id}>{folder.name}</option>
+          ))}
+        </select>
+        <p>Folders: {submission.folderNames.join(', ') || 'No folder'}</p>
+
+        {currentFolder && (
+          <button
+            className="remove-button"
+            onClick={() => onRemoveFromFolder(submission.submissionId, currentFolder)}
+          >
+            Remove from "{currentFolderName}"
+          </button>
+        )}
+        </div>
+
+
       </div>
+
+      </div>
+      
     </div>
   );
 };

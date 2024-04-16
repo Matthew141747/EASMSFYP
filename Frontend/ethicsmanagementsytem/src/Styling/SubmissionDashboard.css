@@ -26,7 +26,7 @@
 
 .date-picker {
     margin-left: 10px;
-    width: auto; /* Allow the date picker to size according to its content */
+    width: auto; 
 }
 
 .dashboard-main {

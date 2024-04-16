@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 //This Parsing Class deals with sections One to Five, along with the Submitted Documents section.
 //Here a different approach is taken given we aim to primarily capture user input from tables in the pdf.
@@ -209,5 +210,21 @@ public class ParseOther {
                 //System.out.println(application.getSupervisorApplicantDetails());
 
         }
+
+    public static void parseDocumentCounts(String text, ExpeditedEthicsApplication application) {
+        String[] lines = text.split("\n");
+        Pattern infoSheetPattern = Pattern.compile("^\\s*Information Sheet\\b", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+       // Pattern consentSheetPattern = Pattern.compile("Consent Form", Pattern.CASE_INSENSITIVE);
+        Pattern consentSheetPattern = Pattern.compile("^\\s*Consent Form\\b", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+
+        for (String line : lines) {
+            if (infoSheetPattern.matcher(line).find()) {
+                application.getDocumentCounts().incrementInfoSheetCount();
+            }
+            if (consentSheetPattern.matcher(line).find()) {
+                application.getDocumentCounts().incrementConsentSheetCount();
+            }
+        }
+    }
 
 }

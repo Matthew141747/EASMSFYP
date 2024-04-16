@@ -11,7 +11,7 @@ import java.io.InputStream;
 public class ParseService {
 
     public ExpeditedEthicsApplication parsePDF(MultipartFile multipartFile) throws IOException {
-        // First, convert MultipartFile to InputStream
+        // Convert MultipartFile to InputStream
         try (InputStream inputStream = multipartFile.getInputStream();
 
              PDDocument document = PDDocument.load(inputStream)) {
@@ -28,6 +28,7 @@ public class ParseService {
                 ParseOther.parseGeneralInformation(text, application);
                 ParseSignatureResearchInfo.parseResearchProjectInfo(text, application);
                 ParseSignatureResearchInfo.parseSignatures(text,application);
+                ParseOther.parseDocumentCounts(text, application);
 
                 return application;
         }

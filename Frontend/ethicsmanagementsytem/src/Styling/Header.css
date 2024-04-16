@@ -17,6 +17,34 @@
     margin: 0;
 }
 
+
+.faculty-links-container {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: calc(50% + 15%);
+    white-space: nowrap;
+}
+
+.faculty-links-container > li {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.faculty-links-container a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    padding: 0 10px; 
+}
+
+
+
+.faculty-link {
+    margin: 0 15px;
+}
+
 .nav-links li {
     margin: 0 15px;
 }
@@ -74,14 +102,15 @@
     align-items: center;
     width: 100%;
 }
-
 .header-title {
     color: white;
-    text-align: center; /* This will center the title */
-    margin: 0 auto; /* This will give equal margin on both sides */
-    padding: 0 20px; /* Add padding to ensure title does not overlap nav links */
-    flex: none; /* Do not allow the title to grow or shrink */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); 
+    margin: 0;
+    padding: 0;
 }
+
 @media (max-width: 768px) {
     .nav-links {
         flex-direction: column;

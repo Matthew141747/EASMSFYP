@@ -7,7 +7,7 @@
     padding: 20px;
 }
 
-.submission-container {
+.submission-page .submission-container {
     width: 80%;
     max-width: 1200px;
     background: white;
@@ -67,7 +67,6 @@
     margin-right: 10px; 
 }
 
-/* Remove margin-right from the last form-group inside .form-horizontal */
 .form-horizontal .form-group:last-child {
     margin-right: 0;
 }
@@ -112,11 +111,10 @@
   .details-column {
     display: flex;
     flex-direction: column;
-    flex-basis: 50%; /* Each column takes up half the width */
+    flex-basis: 50%; 
     padding-right: 20px; 
   }
   
-  /* If you need a separator between columns */
   .details-column:not(:last-child)::after {
     content: '';
     display: block;
@@ -234,14 +232,29 @@
     margin-bottom: 10px;
     border-radius: 4px;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 1em;
+  }
+
+  .compliance-tests ul li .test-status {
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1em;
+    width: 100%; 
   }
   
   .compliance-tests ul li .status {
     font-weight: bold;
+    margin-bottom: 4px;
   }
+
+.compliance-tests ul li .test-description {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 8px; 
+}
   
   .pending {
     color: #ffc107; 

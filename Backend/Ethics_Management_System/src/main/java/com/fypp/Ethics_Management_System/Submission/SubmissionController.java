@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableDefault;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Optional;
 @RestController
@@ -100,6 +103,31 @@ public class SubmissionController {
         submissionService.deleteSubmission(submissionId, authentication.getName());
         return ResponseEntity.ok().build();
     }
+
+    // Analytics Dashboard API
+    @GetMapping("/volume-by-faculty")
+    public ResponseEntity<Map<String, Long>> getSubmissionVolumesByDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        Map<String, Long> volumes = submissionService.getSubmissionVolumesByDateRange(startDate, endDate);
+        return ResponseEntity.ok(volumes);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<SubmissionDTO>> searchSubmissions(
+            @RequestParam Optional<String> searchTerm,
+            Pageable pageable) {
+        logger.info("Starting search with searchTerm: {}", searchTerm.orElse("No searchTerm provided"));
+        try {
+            Page<SubmissionDTO> results = submissionService.searchByApplicantNameOrStudentId(searchTerm, searchTerm, pageable);
+            logger.info("Search completed with {} results found", results.getTotalElements());
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            logger.error("Search failed due to an exception: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 
 }

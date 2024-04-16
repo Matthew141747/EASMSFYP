@@ -56,6 +56,15 @@ public class ExpeditedEthicsApplication {
         this.submittedDocuments = submittedDocuments;
     }
 
+    private DocumentCounts documentCounts = new DocumentCounts();
+
+    public DocumentCounts getDocumentCounts() {
+        return documentCounts;
+    }
+    public void setDocumentCounts(DocumentCounts documentCounts) {
+        this.documentCounts = documentCounts;
+    }
+
     private SubjectMatterDetails subjectMatterDetails;
     private StudyProcedures studyProcedures;
     private ResearchProjectInfo researchProjectInfo;
@@ -70,6 +79,7 @@ public class ExpeditedEthicsApplication {
         this.studyProcedures = new StudyProcedures();
         this.researchProjectInfo = new ResearchProjectInfo();
         this.submittedDocuments = new SubmittedDocuments();
+        this.documentCounts = new DocumentCounts();
     }
 
     // Nested class for Supervisor and Applicant Details
@@ -528,6 +538,35 @@ public class ExpeditedEthicsApplication {
 
         public void setDocumentsProvided(Map<String, Boolean> documentsProvided) {
             this.documentsProvided = documentsProvided;
+        }
+    }
+
+    public static class DocumentCounts {
+        private int infoSheetCount = 0;
+        private int consentSheetCount = 0;
+
+        public int getInfoSheetCount() {
+            return infoSheetCount;
+        }
+
+        public void setInfoSheetCount(int infoSheetCount) {
+            this.infoSheetCount = infoSheetCount;
+        }
+
+        public int getConsentSheetCount() {
+            return consentSheetCount;
+        }
+
+        public void setConsentSheetCount(int consentSheetCount) {
+            this.consentSheetCount = consentSheetCount;
+        }
+
+        public void incrementInfoSheetCount() {
+            this.infoSheetCount++;
+        }
+
+        public void incrementConsentSheetCount() {
+            this.consentSheetCount++;
         }
     }
 

@@ -1,5 +1,6 @@
 package com.fypp.Ethics_Management_System.Parse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,11 @@ public class ParseController {
             Map<String, Object> response = new HashMap<>();
             response.put("application", application);
             response.put("validationResults", validationResults);
+
+            /*ObjectMapper mapper = new ObjectMapper();
+            String jsonResponse = mapper.writeValueAsString(response);
+            System.out.println("JSON RES " + jsonResponse);  */
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

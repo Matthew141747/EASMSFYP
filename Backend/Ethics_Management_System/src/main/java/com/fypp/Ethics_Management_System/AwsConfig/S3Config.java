@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class S3Config {
-    ProfilesConfigFile configFile = new ProfilesConfigFile("C:/Users/Matthew/.aws/credentials");
+    ProfilesConfigFile configFile = new ProfilesConfigFile("C:/Users/35383/.aws/credentials");
     ProfileCredentialsProvider credentialsProvider = new ProfileCredentialsProvider(configFile, "default");
     @Bean
     public AmazonS3 s3client() {
-        // This will automatically use the default credentials provider chain
+        // use the default credentials provider chain
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(credentialsProvider)
                 .withRegion(Regions.EU_WEST_1)

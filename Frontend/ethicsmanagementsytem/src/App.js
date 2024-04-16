@@ -39,6 +39,8 @@ export function App() {
           localStorage.removeItem('accountType');
           setIsLoggedIn(false);
           setUsername('');
+          //Implement Redirect (REMEMBER)
+         // navigate('/Home');
       };
 
       const handleLogin = (username, token, accountType) => {

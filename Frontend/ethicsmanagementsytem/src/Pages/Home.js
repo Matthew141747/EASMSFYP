@@ -15,7 +15,6 @@ export default function Home() {
                     <li>
                         <strong>Relevant documents:</strong> Please find these forms within the Application form that the participants will view, i.e., Participation Information Sheet(s) and Consent form(s). These need to be written with the participant in mind, avoiding complex jargon and ensuring that grammar is checked. If there are separate parts to the study (survey, followed by a focus group), then separate Information Sheets and Consent Forms need to be provided for each phase.
                     </li>
-                    {/* Add other points similarly */}
                 </ol>
             </section>
             
@@ -25,10 +24,8 @@ export default function Home() {
                     <li>Expedited Ethics Form - most studies will use this form</li>
                     <li>MAC Compatible Expedited Ethics Form</li>
                     <li>Full Ethics Form - for studies that include under 18s and/or vulnerable participants (see form and video for definitions)</li>
-                    {/* Add other forms similarly */}
                 </ul>
                 <p>Further guidance and all forms are available for download.</p>
-                {/* Buttons to download forms will go here */}
             </section>
             
             <section className="register-info">
@@ -37,7 +34,6 @@ export default function Home() {
                 <button onClick={() => window.location.href='/Registration'}>Register Now</button>
             </section>
             
-            {/* Add more sections as needed */}
-        </div>
+            </div>
     );
 }

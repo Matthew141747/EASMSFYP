@@ -16,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +35,9 @@ public class SubmissionService {
     private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+
+    private static final Logger log = LoggerFactory.getLogger(SubmissionService.class);
+
     @Transactional
     public SubmissionDTO createSubmission(Set<MultipartFile> files, int userId, String faculty, String department, String studentId, String applicantName, String supervisorName) {
         Submission submission = new Submission();
@@ -63,7 +64,13 @@ public class SubmissionService {
             submission.addFile(fileEntity);
         });
 
-        submissionRepository.save(submission);
+        try {
+            submissionRepository.save(submission);
+            log.info("Submission saved with ID {}", submission.getId());
+        } catch (Exception e) {
+            log.error("Error saving submission", e);
+            throw e; // Rethrow the exception to ensure the transaction is rolled back
+        }
 
         return convertToSubmissionDTO(submission);
     }
@@ -127,7 +134,34 @@ public class SubmissionService {
         submissionRepository.delete(submission);
     }
 
-    // Endpoint to Modify a submission
+    // Analytics Dashboard
+    public Map<String, Long> getSubmissionVolumesByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Object[]> results = submissionRepository.countBySubmissionDateBetweenGroupByFaculty(startDate, endDate);
+        Map<String, Long> volumes = new LinkedHashMap<>(); // Maintain order of insertion
+        for (Object[] result : results) {
+            volumes.put((String) result[0], (Long) result[1]);
+        }
+        return volumes;
+    }
+
+    // Submission Dashboard Search
+    public Page<SubmissionDTO> searchByApplicantNameOrStudentId(Optional<String> applicantName, Optional<String> studentId, Pageable pageable) {
+        if (applicantName.isPresent()) {
+            String searchPattern = "%" + applicantName.get() + "%";
+            logger.info("Executing search with pattern: {}", searchPattern);
+            try {
+                Page<Submission> results = submissionRepository.findByApplicantNameContainingOrStudentIdContaining(searchPattern, searchPattern, pageable);
+                logger.info("Database query executed successfully, converting results to DTOs");
+                return results.map(this::convertToSubmissionDTO);
+            } catch (Exception e) {
+                logger.error("An error occurred during search query execution: {}", e.getMessage(), e);
+                throw new RuntimeException("Database query failed", e);
+            }
+        } else {
+            logger.warn("Search term not provided, returning empty results");
+            return Page.empty(pageable);
+        }
+    }
 
 
 }

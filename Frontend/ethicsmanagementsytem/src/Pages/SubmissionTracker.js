@@ -2,13 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import '../Styling/SubmissionTracker.css'; 
 import FolderSection from '../Components/FolderSection';
 import SubmissionCard from '../Components/SubmissionCard'; 
-
+import { useNavigate } from 'react-router-dom';
 
 const SubmissionTracker = () => {
   const [submissions, setSubmissions] = useState([]);
   const [currentFolder, setCurrentFolder] = useState(null);
   const [folders, setFolders] = useState([]); 
   const [filterNoFolder, setFilterNoFolder] = useState(false);  // State to manage filtering
+  const token = localStorage.getItem('userToken');
+
   // Fetch all tracked submissions when the component mounts
   useEffect(() => {
     //fetchAllTrackedSubmissions();
@@ -17,19 +19,19 @@ const SubmissionTracker = () => {
       fetchAllTrackedSubmissions();
     } else if (currentFolder !== null) {
       fetchSubmissionsForFolder(currentFolder);
-      console.log('What is states here', currentFolder);
+     // console.log('What is states here', currentFolder);
     }
 
  }, [currentFolder]);
- /*
+
+ const navigate = useNavigate();
+
  useEffect(() => {
-  console.log("Filter 'no folder':", filterNoFolder);
-}, [filterNoFolder]);
-
-
-  useEffect(() => {
-    console.log('Updated folders:', folders);
-  }, [folders]);*/
+  // Redirect user to login page if not logged in
+  if (!token) {
+      navigate('/login');
+  }
+}, [token, navigate]); // The effect will run on component mount and whenever the token changes
 
   const fetchSubmissionsForFolder = useCallback(async (folderId) => {
     if (folderId === 'all') return;
@@ -81,7 +83,7 @@ const SubmissionTracker = () => {
       if (!response.ok) throw new Error('Failed to fetch submissions');
       const data = await response.json();
       setSubmissions(data);
-      console.log(submissions)
+      //console.log(submissions)
     } catch (error) {
       console.error("Error fetching submissions", error);
     }
@@ -104,7 +106,7 @@ const SubmissionTracker = () => {
         const errorData = await response.text(); 
         throw new Error(errorData || 'Error moving submission to folder');
       }else{
-        const folderName = folders.find(folder => folder.id === folderId)?.name;
+        //const folderName = folders.find(folder => folder.id === folderId)?.name;
         // refetch the submissions to update the UI
         fetchAllTrackedSubmissions();
       }

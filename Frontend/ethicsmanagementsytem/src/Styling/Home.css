@@ -1,42 +1,72 @@
 .home-container {
-    padding: 20px;
-    max-width: 800px;
-    margin: auto;
+    padding: 40px; 
+    max-width: 1000px; 
+    margin: 40px auto; 
     background-color: #fff;
     color: #333;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif; 
 }
 
-h1 {
+.home-container h1 {
+    font-size: 2.5rem; 
+    color: #0056b3; 
+    font-weight: 300; 
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
+}
+.home-container section {
+    margin-bottom: 50px;
 }
 
-.ethics-process, .application-forms, .register-info {
+.home-container .ethics-process ol, .application-forms ul {
+    padding-left: 40px; 
+    list-style-position: inside; 
+}
+
+.home-container h2 {
+    font-size: 1.8rem; 
+    border-bottom: 2px solid #0056b3; 
+    padding-bottom: 10px; 
     margin-bottom: 30px;
+    color: #333; 
 }
 
-.ethics-process ol, .application-forms ul {
-    padding-left: 20px;
-}
-
-h2 {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 5px;
-    margin-bottom: 20px;
-}
-
-button {
-    padding: 10px 15px;
-    background-color: #007bff;
+.home-container button {
+    padding: 15px 30px; 
+    background-color: #0056b3; 
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    display: inline-block; /* Aligns button properly with text */
-    text-decoration: none; 
+    font-size: 18px; 
+    font-weight: 500; 
+    display: inline-block;
+    text-decoration: none;
+    transition: background-color 0.3s ease; 
 }
 
-button:hover {
-    background-color: #0056b3;
+.home-container button:hover {
+    background-color: #003d82; 
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .home-container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem; 
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        padding: 10px 20px; 
+        font-size: 16px; 
+    }
 }

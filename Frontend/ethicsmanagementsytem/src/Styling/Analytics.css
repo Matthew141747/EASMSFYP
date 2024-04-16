@@ -1,29 +1,25 @@
 .analytics-dashboard {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 15px;
   padding: 20px;
   max-width: 100%;
+  align-items: flex-start;
 }
 
 .analytics-dashboard > div {
-  background-color: #fff; /* Change this to your desired card background */
-  border: 1px solid #e0e0e0; /* Light grey border */
-  border-radius: 8px; /* Rounded corners for the cards */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
-  padding: 15px; /* spacing inside the card */
-  max-height: 400px;
-  height: 100%;
+  background-color: #fff; 
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  flex: 1 1 calc(50% - 15px); 
+  display: flex;
+  flex-direction: column;
+  height: auto; 
+  overflow: hidden; 
 }
 
-/* Responsive settings */
-@media (max-width: 768px) {
-  .analytics-dashboard {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Style for the page heading */
 .analytics-heading {
   font-size: 24px;
   font-weight: bold;
@@ -33,27 +29,84 @@
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px 20px;
-  /* Inline-block and max-width fit-content removed */
 }
 
 .analytics-heading-container {
   display: flex;
-  justify-content: center; /* Centers the heading horizontally */
-  margin-top: 12px; /* Adjusted space above the title */
-  margin-bottom: 12px; /* Reduced space below the title to match the gap between charts */
+  justify-content: center; 
+  margin-top: 12px; 
+  margin-bottom: 12px; 
 }
 
-/* Chart titles */
 .chartjs-render-monitor {
-  background-color: #f7f7f7; /* light background for the chart area */
+  background-color: #f7f7f7; 
   border-radius: 8px;
 }
 
-/* Enhance the visibility of the title in the chart */
 .chartjs-title {
   color: #333;
   font-size: 20px;
   margin-bottom: 10px;
   display: block;
   text-align: center;
+}
+
+.title-and-date-range {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chart-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0; 
+}
+
+.update-data-button {
+  background-color: #4CAF50; 
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.update-data-button:hover {
+  background-color: #45a049;
+}
+
+.date-picker-input,
+.update-data-button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.chart-with-date-range {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px; 
+  padding: 15px;
+  position: relative;
+}
+
+.date-range-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
+  margin-left: auto; 
+}
+
+@media (max-width: 1024px) {
+  .analytics-dashboard {
+    flex-direction: column;
+  }
+  .analytics-dashboard > div {
+    flex: 1 1 auto; 
+  }
 }

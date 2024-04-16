@@ -5,11 +5,12 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement, ArcElement, RadialLinearScale );
 
 // ChartComponent for rendering line charts
-const ChartComponent = ({ data, title }) => {
+const ChartComponent = ({ data, title, type = 'bar', showLegend = true  }) => {
   const options = {
     responsive: true,
     plugins: {
       legend: {
+        display: showLegend,
         position: 'top',
       },
       title: {
@@ -21,7 +22,7 @@ const ChartComponent = ({ data, title }) => {
 
   return (
     <div className="chart-card">
-      <Chart type="line" data={data} options={options} />
+      <Chart  type={type} data={data} options={options} />
     </div>
   );
 };

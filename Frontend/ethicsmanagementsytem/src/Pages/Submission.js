@@ -15,8 +15,9 @@ function SubmissionPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [reviewResults, setReviewResults] = useState(null);
 
-    const navigate = useNavigate();
+    //const [submissionDate, setSubmissionDate] = useState(null);
 
+    const navigate = useNavigate();
     useEffect(() => {
         // Redirect user to login page if not logged in
         if (!token) {
@@ -48,6 +49,8 @@ function SubmissionPage() {
                 const jsonResponse  = await response.json();
                 setParsedData(jsonResponse.application);
                 setReviewResults(jsonResponse.validationResults);
+                console.log('Full Response',jsonResponse);
+               // console.log(reviewResults);
                 //setApplicantName(parsedData.supervisorApplicantDetails.applicantName);
                 //setSupervisorName(parsedData.supervisorApplicantDetails.supervisorName);
                 
@@ -63,19 +66,17 @@ function SubmissionPage() {
     };
 
     useEffect(() => {
-        console.log(parsedData);
-        console.log(reviewResults);
-        // Since parsedData is an object and might be updated partially,
-        // we need to check for the nested properties before trying to access them
+        //console.log(parsedData);
+        //console.log(reviewResults);
         if (parsedData?.supervisorApplicantDetails) {
           setApplicantName(parsedData.supervisorApplicantDetails.applicantName);
           setSupervisorName(parsedData.supervisorApplicantDetails.supervisorName);
           setStudentId(parsedData.supervisorApplicantDetails.applicantID);
 
-          console.log(applicantName);
-          console.log(supervisorName);
+          //console.log(applicantName);
+          //console.log(supervisorName);
         }
-      }, [parsedData, reviewResults, applicantName, supervisorName]); // Only r
+      }, [parsedData, reviewResults, applicantName, supervisorName]);
 
     const handleFileChange = (event) => {
         const newFiles = Array.from(event.target.files).map(file => ({
@@ -127,15 +128,15 @@ function SubmissionPage() {
         }
     };
 
-
-
     const handleSubmit = async (event) => {
         setIsLoading(true);
         event.preventDefault();
         if (!selectedFiles.length) {
             alert('Please select files to upload.');
+            setIsLoading(false); 
             return;
         }
+
         const formData = new FormData();
         formData.append('faculty', faculty);
         formData.append('department', department);
@@ -155,9 +156,34 @@ function SubmissionPage() {
                 body: formData,
             });
             if (response.ok) {
-                alert('Files uploaded successfully');
+                const data = await response.json(); // Submission DTO returned to get the Submission ID
+                const submissionId = data.submissionId;
+                console.log(data);
+                const submissionDate = data.submissionDate;
+
+                //setSubmissionDate(new Date(data.submissionDate));
+                //console.log(submissionDate); 
+               // console.log('Submission ID Check', submissionId);
+
+                if (parsedData.humanParticipantsDetails) {
+                    await handleHumanParticipantsSubmit(parsedData.humanParticipantsDetails.participantCriteria, submissionId,submissionDate);
+                }
+
+                if (parsedData.researchProjectInfo) {
+                    await handleOverviewOfTheResearchProjectSubmit(parsedData.researchProjectInfo.researchTypes, submissionId,submissionDate);
+                }
+
+                //Some parsing is needed to strucutre the data for this API endpoint
+                const preparedData = prepareResearchProjectInformation(parsedData.researchProjectInfo);
+                //console.log('Prepared Data Check', preparedData);
+                
+                await handleResearchProjectInformationSubmit(preparedData, submissionId, submissionDate);
+
+                // remember to finsish the automated review results 
                 setSelectedFiles([]);
                 setParsedData([]);
+                alert('Files uploaded successfully');
+
             } else {
                 alert('Failed to upload files.');
             }
@@ -165,7 +191,7 @@ function SubmissionPage() {
             console.error('Error uploading files:', error);
             alert('Error uploading files.');
         }finally {
-            setIsLoading(false); // End loading
+            setIsLoading(false); 
         }
     };
 
@@ -173,6 +199,137 @@ function SubmissionPage() {
     const clearFileInput = (event) => {
         event.target.value = null;
     };
+
+    //Methods to handle the storage of Parsed Information of a users application.
+
+    const handleHumanParticipantsSubmit = async (participantsData, submissionId, submissionDate) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/analytics/HumanParticipants/submit', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    participantCriteria: participantsData,
+                    submissionId: submissionId,
+                    submissionDate: submissionDate
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Human Participants submitted successfully');
+            } else {
+                console.log('Failed to Submit Human Participants');
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+        }
+    };
+
+    const handleOverviewOfTheResearchProjectSubmit = async (overviewData, submissionId, submissionDate) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/analytics/OverviewOfTheResearchProject/submit', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    researchTypes: overviewData, 
+                    submissionId: submissionId,
+                    submissionDate: submissionDate
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Overview submitted successfully');
+            } else {
+                console.error('Failed to submit overview');
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+        }
+    };
+
+    const handleResearchProjectInformationSubmit = async (ResearchData, submissionId, submissionDate) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/analytics/ResearchProjectInformation/submit', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...ResearchData, 
+                    submissionId: submissionId,
+                    submissionDate: submissionDate
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Research Project Information submitted successfully');
+            } else {
+                console.error('Failed to submit overview');
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+        }
+    };
+
+
+    //Supporting Methods to prepare the Data for Research Project Information
+
+        // Helper function to determine recording type for numerical format
+        const determineRecordingType = (video, audio) => {
+            if (video && audio) return 3;
+            if (video) return 2;
+            if (audio) return 1;
+            return 0;
+        };
+
+        const prepareResearchProjectInformation = (info) => {
+            return {
+                participantsRecorded: info.recordingDetails.willParticipantsBeRecorded,
+                recordingType: determineRecordingType(info.recordingDetails.videoRecording, info.recordingDetails.audioRecording),
+                prototypeDeveloped: info.prototypeDetails.willPrototypeBeDeveloped,
+                prototypeServiceFramework: info.prototypeDetails.prototypeTypes['Service/Framework'],
+                prototypeDigitalUiApp: info.prototypeDetails.prototypeTypes['Digital UI/App'],
+                prototypePhysicalArtifact: info.prototypeDetails.prototypeTypes['Physical artifact'],
+                minimumParticipants: info.minimumParticipants,
+                maximumParticipants: info.maximumParticipants,
+                accommodationForNonParticipants: 0  
+            };
+        };
+
+        /*
+    const handleAutomatedReviewSubmit = async (ReviewData, submissionId) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/analytics/AutomatedReviewResults/submit', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    participantCriteria: ReviewData,
+                    submissionId: submissionId
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Automated Review Results submitted successfully');
+            } else {
+                console.log('Failed to Submit Automated Review Results');
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+        }
+    };*/
+
+
+
+
 
     return (
         <div className="submission-page">
@@ -267,7 +424,6 @@ function SubmissionPage() {
                             {isLoading && (
                                 <div className="loading-indicator">
                                     Loading...
-                                    {/* You can replace the text with a graphical loader if you have one */}
                                 </div>
                             )}
 
@@ -285,16 +441,51 @@ function SubmissionPage() {
                             <h3>Compliance Tests</h3>
                             <ul>
                                 <li>
+                                <div className="test-status">
                                     Signatures Present:{" "}
                                     <span className={`status ${reviewResults.signaturesPresent ? "success" : "failure"}`}>
                                         {reviewResults.signaturesPresent ? "Yes" : "No"}
                                     </span>
+                                    </div>
+                                    <p className="test-description">
+                                        This test verifies that all required signatures are present in your Expedited Ethics Application. 
+                                    </p>
                                 </li>
+
                                 <li>
+                                <div className="test-status">
                                     Correct Application Form Used:{" "}
                                     <span className={`status ${reviewResults.correctDocument ? "success" : "failure"}`}>
                                         {reviewResults.correctDocument ? "Yes" : "No"}
                                     </span>
+                                    </div>
+                                    <p className="test-description">
+                                        This test checks whether the correct Application form has been used for the submission. If the result here is No, then you may need to use the Full Ethics Application Form.
+                                    </p>
+                                </li>
+
+                                <li>
+                                <div className="test-status">
+                                    All Information Sheets Present:{" "}
+                                    <span className={`status ${reviewResults.allInformationSheetsPresent ? "success" : "failure"}`}>
+                                        {reviewResults.allInformationSheetsPresent ? "Yes" : "No"}
+                                    </span>
+                                    </div>
+                                    <p className="test-description">
+                                        This test ensures that all required informational sheets are included with the application. 
+                                    </p>
+                                </li>
+
+                                <li>
+                                <div className="test-status">
+                                    All Consent Sheets Present:{" "}
+                                    <span className={`status ${reviewResults.allConsentSheetsPresent ? "success" : "failure"}`}>
+                                        {reviewResults.allConsentSheetsPresent ? "Yes" : "No"}
+                                    </span>
+                                    </div>
+                                    <p className="test-description">
+                                        This test confirms that all necessary consent sheets are present.
+                                    </p>
                                 </li>
                             </ul>
                         </div>

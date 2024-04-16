@@ -4,8 +4,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function SubmissionDashboard() {
-    //const accountType = localStorage.getItem('accountType'); // Retrieve the account type from localStorage
-
     const [submissions, setSubmissions] = useState([]);
     const [selectedSubmissions, setSelectedSubmissions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -83,10 +81,36 @@ function SubmissionDashboard() {
 
     };
 
-    //For Search bar, not yet implemented
+    //Search 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
-        // TODO: Implement search functionality
+    };
+
+    const searchSubmissions = async () => {
+        const token = localStorage.getItem('userToken');
+        let queryParams = `?page=${currentPage - 1}&size=${itemsPerPage}&searchTerm=${searchTerm}`;
+        console.log(queryParams);
+        try {
+            const response = await fetch(`http://localhost:8080/api/submissions/search${queryParams}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log('Search Results', data);
+            setSubmissions(data.content);
+            setTotalPages(data.totalPages);
+            setTotalSubmissions(data.totalElements);
+        } catch (error) {
+            console.error('Failed to search submissions:', error);
+        }
     };
 
 
@@ -131,14 +155,11 @@ function SubmissionDashboard() {
       const trackSubmission = async (submissionId) => {
         const token = localStorage.getItem('userToken');
         try {
-            // Append submissionId as a query parameter in the URL
             const url = `http://localhost:8080/api/tracking/track?submissionId=${submissionId}`;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
-                    // Note: 'Content-Type': 'application/json' is not needed here 
-                    // because we're not sending a JSON body anymore
                 }
             });
     
@@ -148,10 +169,8 @@ function SubmissionDashboard() {
     
             const trackedSubmission = await response.json();
             console.log('Submission tracked:', trackedSubmission);
-            // Handle success - maybe update state or show a success message
         } catch (error) {
             console.error('Failed to track submission:', error);
-            // Handle error - show error message to user
         }
     };
     const rejectSubmission = (submissionId) => {
@@ -218,6 +237,7 @@ function SubmissionDashboard() {
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
+                <button onClick={searchSubmissions} className="search-button">Search</button>
                 <div className="filters">
 
                     {/* Sorting by date */}

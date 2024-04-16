@@ -50,6 +50,7 @@ const Profile = () => {
                 if(response.ok) {
                     const submissions = await response.json();
                     setSubmissions(submissions);
+                    console.log(submissions);
 
                     // Update state to hold these submissions
                 } else {
@@ -69,8 +70,7 @@ const Profile = () => {
     }
 
     const handleEdit = (field) => {
-        console.log(`Edit ${field}`);
-        // Implement the logic to handle editing
+        //console.log(`Edit ${field}`);
     };
 
     return (
@@ -95,21 +95,26 @@ const Profile = () => {
                     <button onClick={() => handleEdit('details')} className="edit-details-btn">Edit Details</button>
                 </div>
 
-            <div className="submissions-section">
-                    <h3>Your Submissions</h3>
-                    <div className="submission-info">
+                <div className="submissions-section">
+                <h3>Your Submissions</h3>
+                <div className="submission-info">
                     {currentSubmissions.length > 0 ? (
                         currentSubmissions.map((submission) => (
                             <div className="submission-card" key={submission.submissionId}>
-                                <p>Faculty: {submission.faculty}</p>
-                                <p>Department: {submission.department}</p>
-                                <p>Submission Date: {submission.submissionDate}</p>
-                                <p>Number of Files: {submission.fileMetadataList?.length || 0}</p>
+                                <h4 className="submission-title">{submission.applicantName}'s Submission</h4>
+                                <p className="submission-faculty"><strong>Faculty:</strong> {submission.faculty}</p>
+                                <p className="submission-department"><strong>Department:</strong> {submission.department || "Not specified"}</p>
+                                <p className="submission-date"><strong>Submitted on:</strong> {submission.submissionDate}</p>
+                                <p className="submission-files"><strong>Files:</strong> {submission.fileMetadataList?.map(file => file.fileName).join(', ')}</p>
+                                <p className="submission-review-status"><strong>Status:</strong> <span className="review-status">{submission.reviewStatus}</span></p>
+                                <p className="submission-supervisor"><strong>Supervisor:</strong> {submission.supervisorName}</p>
                             </div>
                         ))
                     ) : (
-                        <p>No submissions made yet.</p>
+                        <p className="no-submissions">No submissions made yet.</p>
                     )}
+                </div>
+                {currentSubmissions.length > 0 && (
                     <div className="pagination-controls">
                         <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
                             Previous
@@ -119,23 +124,12 @@ const Profile = () => {
                             Next
                         </button>
                     </div>
-                </div>
-                </div>
-                <div className="notification-options-section">
-                    <h3>Notification Options</h3>
-                    <label>
-                        <input
-                            type="checkbox"
-                            // Assuming a state to hold this value, for simplicity directly used
-                            checked={userDetails.receiveEmailNotifications}
-                            onChange={() => {} /* Implement logic to toggle */ }
-                        />
-                        Receive email notifications about submission status
-                    </label>
-                </div>
-                
+                )}
             </div>
-            </div>
+        </div>
+
+        </div>
+
     );
 }
 
