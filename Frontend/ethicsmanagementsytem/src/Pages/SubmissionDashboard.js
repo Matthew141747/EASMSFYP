@@ -23,6 +23,11 @@ function SubmissionDashboard() {
     const [reviewStatusFilter, setReviewStatusFilter] = useState('');
 
     const [displayedSubmissions, setDisplayedSubmissions] = useState([]);
+    const [trackedSubmissions, setTrackedSubmissions] = useState([]);
+
+    //Track Submission Loading 
+    const [loading, setLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const fetchSubmissions = useCallback(async (sortOrderParam = sortOrder) => {
         let queryParams = `?page=${currentPage - 1}&size=${itemsPerPage}&sort=${sortOrderParam}`;
@@ -46,6 +51,7 @@ function SubmissionDashboard() {
             }
     
             const data = await response.json();
+            console.log(data);
             setSubmissions(data.content);
             setTotalPages(data.totalPages);
             setTotalSubmissions(data.totalElements);
@@ -56,6 +62,7 @@ function SubmissionDashboard() {
   
     useEffect(() => {
         fetchSubmissions();
+        fetchTrackedSubmissions();
     }, [fetchSubmissions]);
 
     
@@ -81,7 +88,7 @@ function SubmissionDashboard() {
 
     };
 
-    //Search 
+    //Search NOTE: Not Currently working
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
@@ -153,6 +160,8 @@ function SubmissionDashboard() {
 
       // Functions to handle track and reject 
       const trackSubmission = async (submissionId) => {
+        setLoading(true);
+        setSuccessMessage('');
         const token = localStorage.getItem('userToken');
         try {
             const url = `http://localhost:8080/api/tracking/track?submissionId=${submissionId}`;
@@ -169,10 +178,18 @@ function SubmissionDashboard() {
     
             const trackedSubmission = await response.json();
             console.log('Submission tracked:', trackedSubmission);
+            setSuccessMessage('You are now tracking this submission');
+
         } catch (error) {
             console.error('Failed to track submission:', error);
+            setSuccessMessage('Failed to track submission');
+
         }
+        setLoading(false);
+
     };
+
+
     const rejectSubmission = (submissionId) => {
        
     };
@@ -225,6 +242,23 @@ function SubmissionDashboard() {
         fetchSubmissions(newSortOrder); 
       };
 
+      
+      const fetchTrackedSubmissions = useCallback(async () => {
+        const token = localStorage.getItem('userToken');
+        try {
+            const response = await fetch(`http://localhost:8080/api/tracking/allTrackedSubmissions`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) throw new Error('Failed to fetch tracked submissions');
+            const data = await response.json();
+            setTrackedSubmissions(data.map(sub => sub.submissionId)); 
+        } catch (error) {
+            console.error("Error fetching tracked submissions", error);
+        }
+    }, []);
 
     return (
 
@@ -245,12 +279,15 @@ function SubmissionDashboard() {
                     <option value="recent">Most Recent</option>
                     <option value="oldest">Oldest</option>
                     </select>
-                    {/* Filtering by review status */}
+                    {/* Filtering by review status Fix This Remember*/}
                     <select value={reviewStatusFilter} onChange={e => setReviewStatusFilter(e.target.value)}>
                     <option value="">All Statuses</option>
                     <option value="Pending">Pending</option>
                     <option value="Accepted">Accepted</option>
+                    <option value="Accept with Minor">Accept With Minor</option>
                     <option value="Rejected">Rejected</option>
+                    <option value="Reject With Major">Reject With Major</option>
+                    <option value="Reject With Minor">Reject With Minor</option>
                     </select>
 
                     <select value={facultyFilter} onChange={e => setFacultyFilter(e.target.value)}>
@@ -293,6 +330,7 @@ function SubmissionDashboard() {
                             <th>Submission Date</th>
                             <th>Review Status</th>
                             <th>Number of Files</th>
+                            <th>Tracking</th> 
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -307,6 +345,7 @@ function SubmissionDashboard() {
                         <td>{formatDate(submission.submissionDate)}</td>                        
                         <td>{submission.reviewStatus}</td> 
                         <td>{submission.fileMetadataList?.length || 0}</td> 
+                        <td>{trackedSubmissions.includes(submission.submissionId) ? 'Yes' : 'No'}</td> 
                         <td>
                             <button onClick={() => selectSubmission(submission)}>
                             View Details
@@ -337,12 +376,23 @@ function SubmissionDashboard() {
                             <button onClick={() => downloadFiles(submission.submissionId)}>
                                 Download Files
                             </button>
-                            <button onClick={() => trackSubmission(submission.submissionId)}>
-                                Track Submission
-                            </button>
-                            <button onClick={() => rejectSubmission(submission.submissionId)}>
-                                Reject Submission
-                            </button>
+
+                            <button onClick={() => trackSubmission(submission.submissionId)} disabled={loading}>
+                                    {loading ? (
+                                        <>
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Tracking...
+                                        </>
+                                    ) : (
+                                        'Track Submission'
+                                    )}
+                                </button>
+                                {successMessage && (
+                                    <div className="alert alert-success" role="alert">
+                                        {successMessage}
+                                    </div>
+                                )}
+
                             <button onClick={() => removeSelectedSubmission(submission.submissionId)} className="remove-btn">
                                    &#x2715; 
                             </button>

@@ -59,7 +59,7 @@ useEffect(() => {
         <div className="submission-status">
         <p>Current Status of Submission: {submission.reviewStatus}</p>
 
-          <select className="update-status-select" onChange={handleUpdateStatus }>
+          <select className="update-status-select"   aria-label="Update Status" onChange={handleUpdateStatus }>
             <option value="">Update Status</option>
             {updateStatusOptions.map(status => (
               <option key={status} value={status}>{status}</option>
@@ -73,7 +73,7 @@ useEffect(() => {
         </div>
 
         <div className="submission-info">
-          <select className="move-to-folder-select" onChange={(e) => onMove(submission.submissionId, e.target.value)}>
+          <select className="move-to-folder-select" aria-label="Move to folder" onChange={(e) => onMove(submission.submissionId, e.target.value)}>
           <option value="">Move to folder...</option>
           {folders.map(folder => (
             <option key={folder.id} value={folder.id}>{folder.name}</option>

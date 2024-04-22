@@ -215,7 +215,7 @@ public class ParseOther {
         String[] lines = text.split("\n");
         Pattern infoSheetPattern = Pattern.compile("^\\s*Information Sheet\\b", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
        // Pattern consentSheetPattern = Pattern.compile("Consent Form", Pattern.CASE_INSENSITIVE);
-        Pattern consentSheetPattern = Pattern.compile("^\\s*Consent Form\\b", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+        Pattern consentSheetPattern = Pattern.compile("^\\s*Ethical Consent Form\\b", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
         for (String line : lines) {
             if (infoSheetPattern.matcher(line).find()) {

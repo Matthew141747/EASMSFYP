@@ -187,7 +187,7 @@ useEffect(() => {
       }
     
       const data = await response.json();
-      //console.log('Analytics Data for Overview of Research Project', data);
+      console.log('Analytics Data for Overview of Research Project', data);
       updateChartDataOverviewResearchProject(data);
     };
 

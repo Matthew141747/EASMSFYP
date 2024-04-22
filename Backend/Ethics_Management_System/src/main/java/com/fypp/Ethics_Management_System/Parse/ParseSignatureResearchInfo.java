@@ -142,7 +142,7 @@ public class ParseSignatureResearchInfo {
 
             //System.out.println("LOOK HERE Applicant Signature Parsed: " + signature.getName() + ", ID: " + signature.getSignatureId());
 
-            // Just to handle the logic for one or two applicant signatures, we use a simple if-else structure
+            // Just to handle the logic for one or two applicant signatures, I use a simple if-else structure
             if (declaration.getApplicantSignature1() == null) {
                 declaration.setApplicantSignature1(signature);
             } else {

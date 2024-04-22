@@ -1,4 +1,4 @@
-package com.fypp.Ethics_Management_System.Analytics.Controller;
+package com.fypp.Ethics_Management_System.Analytics.Repository.Controller;
 
 import com.fypp.Ethics_Management_System.Analytics.DTO.HumanParticipantsInStudyDTO;
 import com.fypp.Ethics_Management_System.Analytics.Entity.HumanParticipantsInStudy;

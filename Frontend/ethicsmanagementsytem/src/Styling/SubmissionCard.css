@@ -76,16 +76,13 @@
 
 .submission-status-and-info .submission-actions {
   display: flex;
-  flex-direction: column;
+  /*flex-direction: column;*/
 }
 
 .submission-status-and-info .submission-actions button {
   margin-bottom: 5px; 
 }
 
-.submission-status-and-info .submission-actions button:last-child {
-  margin-bottom: 0;
-}
 
 .submission-status-and-info .remove-button {
   background-color: #dc3545;

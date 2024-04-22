@@ -9,6 +9,8 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.1",
     "cors": "^2.8.5",
+    "jest-canvas-mock": "^2.5.2",
+    "jest-fetch-mock": "^3.0.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-chartjs-2": "^5.2.0",
